@@ -1,4 +1,4 @@
-# Liquidity Vault — Week 8 skeleton, Week 9 Deposit, Week 10 Withdraw
+# Liquidity Vault — Weeks 8–11
 
 Существующий проект Anchor **0.31.1**. Program ID:
 `DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9`.
@@ -341,3 +341,123 @@ Program keypair и Program ID должны оставаться прежними
 Справка: [исходники Anchor v0.31.1](https://github.com/coral-xyz/anchor/tree/v0.31.1).
 Описание CPI: https://solana.com/docs/core/cpi.
 Атомарность транзакций: https://solana.com/docs/core/transactions.
+
+## Week 11 — AMM и концентрированная ликвидность
+
+Созданы собственные классические SPL-токены, Raydium CLMM-пул и одна позиция
+**кошелька** в Solana Devnet. Week 11 реализована отдельным клиентом
+[`week11/`](week11/README.md), адаптирующим официальные SDK V2 demo
+`createPool.ts` и `createPositionFromLiquidity.ts`. Все публичные адреса,
+параметры и signatures находятся в
+[`manifest.devnet.json`](week11/manifest.devnet.json).
+
+Код и deployment Liquidity Vault не изменялись. Week 8–10 остаются самостоятельным
+одноактивным vault; его активы не переводились в Raydium. Существующие 10 Devnet
+интеграционных тестов повторно не запускались. До операций снят снимок **136
+аккаунтов**, включая 31 VaultConfig, их share mint, Token Vault и существующие
+UserPosition. После операций совпали owner, длина, lamports и SHA-256 данных всех
+аккаунтов: [`vault-baseline.devnet.json`](week11/vault-baseline.devnet.json).
+
+### Адреса Devnet
+
+| Объект | Адрес / Explorer |
+| --- | --- |
+| Кошелёк, владелец позиции | [bnCwyNq3mqquCp3bQksZnrMk7t4wR8iw2NU2x21pjDe](https://explorer.solana.com/address/bnCwyNq3mqquCp3bQksZnrMk7t4wR8iw2NU2x21pjDe?cluster=devnet) |
+| Официальный Raydium CLMM | [DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH](https://explorer.solana.com/address/DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH?cluster=devnet) |
+| GUL-A, token0 | [6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy](https://explorer.solana.com/address/6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy?cluster=devnet) |
+| GUL-B, token1 | [GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1](https://explorer.solana.com/address/GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1?cluster=devnet) |
+| CLMM-пул | [gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf](https://explorer.solana.com/address/gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf?cluster=devnet) |
+| AmmConfig, index 0 | [CD4aJtX11cqTCAc83nxSPkkh5JW2yjD6uwHeovjqQ1qu](https://explorer.solana.com/address/CD4aJtX11cqTCAc83nxSPkkh5JW2yjD6uwHeovjqQ1qu?cluster=devnet) |
+| Pool token0 vault | [Bu3sjqQQRBurbdRJ85EV6s9odkQfPnAsGYXiBo9kp222](https://explorer.solana.com/address/Bu3sjqQQRBurbdRJ85EV6s9odkQfPnAsGYXiBo9kp222?cluster=devnet) |
+| Pool token1 vault | [HVpYLZewY65hhhPSPR1koHmERQfXoCqkfudKwtgjiBSo](https://explorer.solana.com/address/HVpYLZewY65hhhPSPR1koHmERQfXoCqkfudKwtgjiBSo?cluster=devnet) |
+| Observation | [EgrpcnywpsvEiRAZNQsKPKx7Z6s27fyLVwGpPDqCaHbM](https://explorer.solana.com/address/EgrpcnywpsvEiRAZNQsKPKx7Z6s27fyLVwGpPDqCaHbM?cluster=devnet) |
+| Tick bitmap extension | [GNbsWc1ZzwfzQoMNJpoUEJdQxDp6Am8JpyxFywWqRUg4](https://explorer.solana.com/address/GNbsWc1ZzwfzQoMNJpoUEJdQxDp6Am8JpyxFywWqRUg4?cluster=devnet) |
+| NFT mint | [ErjZbudrBuoqt66nqm5UQfHuB9m1zWg5PvEwCpmFA9JG](https://explorer.solana.com/address/ErjZbudrBuoqt66nqm5UQfHuB9m1zWg5PvEwCpmFA9JG?cluster=devnet) |
+| NFT ATA кошелька | [GiceKAs4mZU6ENRbmiN93e2vzbHFAmyYsSBWhSAmeWDk](https://explorer.solana.com/address/GiceKAs4mZU6ENRbmiN93e2vzbHFAmyYsSBWhSAmeWDk?cluster=devnet) |
+| Personal position | [P2fxUUpgMEQfkfbEqyC1t4sTSgw8DM3wW7QCnYKYeTs](https://explorer.solana.com/address/P2fxUUpgMEQfkfbEqyC1t4sTSgw8DM3wW7QCnYKYeTs?cluster=devnet) |
+| Lower tick array | [BjY2zbtvFwx2PWc8hyTJSqgRouD5Y2mci54zgZYLvub6](https://explorer.solana.com/address/BjY2zbtvFwx2PWc8hyTJSqgRouD5Y2mci54zgZYLvub6?cluster=devnet) |
+| Upper tick array | [8x9Yg5ep6kAfK3c3y7F3vAvvy8TMkwxB9iVzV9RtK68s](https://explorer.solana.com/address/8x9Yg5ep6kAfK3c3y7F3vAvvy8TMkwxB9iVzV9RtK68s?cluster=devnet) |
+
+GUL-A/GUL-B — метки в скриптах и документации, а не опубликованные metadata.
+У обоих mint decimals=6, supply=1 000 000 токенов, mint authority=кошелёк,
+freeze authority=None. NFT классический SPL, decimals=0, supply=1, баланс NFT ATA=1.
+Metaplex metadata не создавались; derived metadata/protocol-position адреса в
+манифесте являются адресами интерфейса инструкции, а не обещанием наличия аккаунта.
+
+### Цена, диапазон и внесённая ликвидность
+
+- Канонический порядок mint: GUL-A=token0, GUL-B=token1, сравнение сырых pubkey.
+- Начальная и фактическая цена при проверке: **1 GUL-A = 1 GUL-B**.
+- `sqrtPriceX64 = 18446744073709551616` (2^64), текущий tick=0.
+- Комиссия пула **0,25%**, tick spacing **60**; конфигурация проверена on-chain.
+- Диапазон ticks **[-1080, 960)**; цены границ **0.89763244330945058506** и
+  **1.1007537807153331814** GUL-B за GUL-A.
+- Внесено **1000 GUL-A** и **1121.658824 GUL-B**; суммы подтверждены metadata
+  транзакции. Остатки ATA: **999000 GUL-A**, **998878.341176 GUL-B**.
+- Liquidity позиции и активная liquidity пула: **21338374629**.
+
+Выбран учебный диапазон около ±10% от начальной цены. Нижняя граница округлена
+вниз, верхняя вверх до допустимых ticks, поэтому фактический диапазон немного
+шире. При цене внутри диапазона вносится оба токена. Это не прогноз цены и не
+торговая рекомендация. При выходе цены за диапазон позиция теряет активность;
+равные nominal token amounts не требуются, поскольку границы не симметричны
+в пространстве sqrtPrice. Последующие сделки могут изменить цену — `yarn read`
+читает её заново, значения выше являются снимком завершения Week 11.
+
+### Транзакции и расходы
+
+| Операция | Подтверждённая транзакция |
+| --- | --- |
+| Два mint, ATA и выпуск токенов | [5ez4g4DVeWTvaJNz5YRxTE52h8Gw3EXwkJs871QXfUKhAMiYPpfUJPhkD3mwbCr7nMiJJ99pK5tgC95WRdDqCu3E](https://explorer.solana.com/tx/5ez4g4DVeWTvaJNz5YRxTE52h8Gw3EXwkJs871QXfUKhAMiYPpfUJPhkD3mwbCr7nMiJJ99pK5tgC95WRdDqCu3E?cluster=devnet) |
+| Создание пула | [Df5HiZSpYpxYGaXXQZEEqmGGbhrsnJVP8sovx3NUpphEFAdSvkTHxaJxDNZMZD6nrAHDUoPztV2mtkN9zoXaoGf](https://explorer.solana.com/tx/Df5HiZSpYpxYGaXXQZEEqmGGbhrsnJVP8sovx3NUpphEFAdSvkTHxaJxDNZMZD6nrAHDUoPztV2mtkN9zoXaoGf?cluster=devnet) |
+| Открытие и финансирование позиции | [3KxcQDP582a3TZnYdPdyrnMt51HFihbj9BHLU5DdBKNahKWpnEFFbsYjbut9yU8DR39NfNjGpjb2L88EhhrKcBLT](https://explorer.solana.com/tx/3KxcQDP582a3TZnYdPdyrnMt51HFihbj9BHLU5DdBKNahKWpnEFFbsYjbut9yU8DR39NfNjGpjb2L88EhhrKcBLT?cluster=devnet) |
+
+Баланс до: **5.695481960 SOL**; после: **5.535518320 SOL**.
+Расход: **0.159963640 Devnet SOL**, включая **0.000030000 SOL** transaction fees;
+остальное — rent созданных аккаунтов. Предварительный бюджет с резервами:
+**0.175826440 SOL**; программный предел расходов: **0.5 SOL**.
+
+Один запрос к официальному Devnet faucet на 1 SOL завершился `Internal error`;
+пополнение не подтверждено, получено 0 SOL. Повторные запросы не выполнялись.
+Имеющегося баланса хватило; средства mainnet и платные API не использовались.
+
+### Проверка без новых транзакций
+
+```bash
+cd /mnt/d/MySelf/Projects/ForGulya/Solana/liquidity_vault/week11
+nvm use
+yarn install --frozen-lockfile
+yarn typecheck
+yarn test
+yarn verify
+yarn read
+```
+
+`verify` читает статусы прежних signatures и аккаунты: Devnet genesis, SPL mint,
+authority, supply, ATA и расходы, владельца CLMM pool, mint ordering, PDA,
+observation/bitmap, ненулевую liquidity, NFT владельца, связь позиции с пулом,
+границы ticks и baseline vault. Этот режим не читает private key, не подписывает
+и не отправляет транзакции. `read` показывает текущее состояние пула.
+
+Все проверки прошли. Во время чтений возникали HTTP 429; ограниченный backoff
+завершился успешно. SDK 0.2.74-alpha имеет проблему `getPoolInfoFromRpc` для
+пустого нового пула без tick arrays; перед первой позицией используется официальный
+`getSimplePoolInfo` и уже проверенные аккаунты пула. Пакет SDK не модифицировался.
+
+Для ручной проверки Explorer открыть ссылки выше с `cluster=devnet`, проверить
+owner пула и personal position (`DRayAU…`), mint/owner/balance NFT ATA, успешный
+статус транзакции позиции и SPL inner instructions с двумя взносами и выпуском NFT.
+Если Explorer не декодирует CLMM layout, точные ticks/liquidity проверяет `yarn verify`.
+**Визуальная проверка страниц Explorer в этой среде не завершена:** подключённый
+браузер отсутствовал, HTTP-запрос Explorer вернул 429. Подтверждение on-chain
+получено непосредственно через Devnet RPC; это ограничение не скрывается за
+утверждением о просмотре Explorer.
+
+### Следующие недели
+
+- **Week 12:** swap через CPI от имени Vault PDA — отдельное согласованное изменение.
+- **Week 13:** CLMM-позиция от имени Vault PDA — отдельное изменение владения и учёта.
+
+Перед переводом реальных депозитов vault в CLMM необходимо решить учёт полной
+стоимости активов и вывод из стратегии: текущие deposit/withdraw учитывают только
+asset ATA. Week 11 эту модель не меняет и миграцию не добавляет.

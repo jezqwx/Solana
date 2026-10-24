@@ -1,0 +1,246 @@
+{
+  "schema": 1,
+  "cluster": "devnet",
+  "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "rpc": "https://api.devnet.solana.com",
+  "wallet": "bnCwyNq3mqquCp3bQksZnrMk7t4wR8iw2NU2x21pjDe",
+  "clmmProgram": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+  "vaultProgram": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+  "sources": {
+    "sdk": "@raydium-io/raydium-sdk-v2@0.2.74-alpha",
+    "sdkCommit": "e2e8bcd865189c994682a9477ec8eaf1e2da8aaf",
+    "demoCommit": "003d9045830033e5ef4178d6db129d83f93e1c7f",
+    "demo": "https://github.com/raydium-io/raydium-sdk-V2-demo"
+  },
+  "startBalanceLamports": 5695481960,
+  "transactions": {
+    "tokens": {
+      "signature": "5ez4g4DVeWTvaJNz5YRxTE52h8Gw3EXwkJs871QXfUKhAMiYPpfUJPhkD3mwbCr7nMiJJ99pK5tgC95WRdDqCu3E",
+      "blockhash": "D4L2QJnXcLS6eJxvmpS9znAHtWvTAL6NVR8wTK2W4qmi",
+      "lastValidBlockHeight": 501905723,
+      "feeLamports": 15000,
+      "simulatedDebitLamports": 5125480,
+      "simulatedUnits": 32024,
+      "status": "confirmed",
+      "expectedAccounts": [
+        "6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy",
+        "9DJYtYoDgCQHtDRomRNhSHyAy727m16pXRXPERfX6JjL",
+        "GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1",
+        "9mEtVt5UsXuYjUSTRPjNSvS4S3APZoKt7aq9VwamCNgR"
+      ]
+    },
+    "pool": {
+      "signature": "Df5HiZSpYpxYGaXXQZEEqmGGbhrsnJVP8sovx3NUpphEFAdSvkTHxaJxDNZMZD6nrAHDUoPztV2mtkN9zoXaoGf",
+      "blockhash": "FxLFBkgcuWeKTGw4EHQUjTToiNrDcJ7kFH6M5RXqHEEN",
+      "lastValidBlockHeight": 501905811,
+      "feeLamports": 5000,
+      "simulatedDebitLamports": 44856320,
+      "simulatedUnits": 49065,
+      "status": "confirmed",
+      "expectedAccounts": [
+        "gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf",
+        "Bu3sjqQQRBurbdRJ85EV6s9odkQfPnAsGYXiBo9kp222",
+        "HVpYLZewY65hhhPSPR1koHmERQfXoCqkfudKwtgjiBSo",
+        "EgrpcnywpsvEiRAZNQsKPKx7Z6s27fyLVwGpPDqCaHbM",
+        "GNbsWc1ZzwfzQoMNJpoUEJdQxDp6Am8JpyxFywWqRUg4"
+      ]
+    },
+    "position": {
+      "signature": "3KxcQDP582a3TZnYdPdyrnMt51HFihbj9BHLU5DdBKNahKWpnEFFbsYjbut9yU8DR39NfNjGpjb2L88EhhrKcBLT",
+      "blockhash": "C9bARNya9EL1Kuqje5Ndq7nYm1ygszrfSqkun9B4W3FR",
+      "lastValidBlockHeight": 501906199,
+      "feeLamports": 10000,
+      "simulatedDebitLamports": 109981840,
+      "simulatedUnits": 111971,
+      "status": "confirmed",
+      "expectedAccounts": [
+        "ErjZbudrBuoqt66nqm5UQfHuB9m1zWg5PvEwCpmFA9JG",
+        "GiceKAs4mZU6ENRbmiN93e2vzbHFAmyYsSBWhSAmeWDk",
+        "P2fxUUpgMEQfkfbEqyC1t4sTSgw8DM3wW7QCnYKYeTs",
+        "BjY2zbtvFwx2PWc8hyTJSqgRouD5Y2mci54zgZYLvub6",
+        "8x9Yg5ep6kAfK3c3y7F3vAvvy8TMkwxB9iVzV9RtK68s"
+      ]
+    }
+  },
+  "ammConfig": {
+    "id": "CD4aJtX11cqTCAc83nxSPkkh5JW2yjD6uwHeovjqQ1qu",
+    "index": 0,
+    "tickSpacing": 60,
+    "tradeFeeRate": 2500,
+    "protocolFeeRate": 120000,
+    "fundFeeRate": 40000,
+    "fundOwner": "DRayDktajVnqaNPyuYATWmZXyiJkdXpmUPdBYEapgaLY",
+    "description": "Devnet 0.25%, spacing 60"
+  },
+  "budget": {
+    "rent": [
+      {
+        "name": "asset mints",
+        "bytes": 82,
+        "count": 2,
+        "lamports": 2133600
+      },
+      {
+        "name": "wallet asset ATAs",
+        "bytes": 165,
+        "count": 2,
+        "lamports": 2976880
+      },
+      {
+        "name": "pool",
+        "bytes": 1544,
+        "count": 1,
+        "lamports": 8493760
+      },
+      {
+        "name": "pool token vaults",
+        "bytes": 165,
+        "count": 2,
+        "lamports": 2976880
+      },
+      {
+        "name": "observation",
+        "bytes": 4483,
+        "count": 1,
+        "lamports": 23423880
+      },
+      {
+        "name": "bitmap extension",
+        "bytes": 1832,
+        "count": 1,
+        "lamports": 9956800
+      },
+      {
+        "name": "tick arrays",
+        "bytes": 10240,
+        "count": 2,
+        "lamports": 105338880
+      },
+      {
+        "name": "personal position",
+        "bytes": 281,
+        "count": 1,
+        "lamports": 2077720
+      },
+      {
+        "name": "legacy protocol position reserve",
+        "bytes": 225,
+        "count": 1,
+        "lamports": 1793240
+      },
+      {
+        "name": "classic NFT mint",
+        "bytes": 82,
+        "count": 1,
+        "lamports": 1066800
+      },
+      {
+        "name": "NFT ATA",
+        "bytes": 165,
+        "count": 1,
+        "lamports": 1488440
+      },
+      {
+        "name": "metadata reserve (not requested)",
+        "bytes": 679,
+        "count": 1,
+        "lamports": 4099560
+      }
+    ],
+    "estimatedRentLamports": 165826440,
+    "feeReserveLamports": 10000000,
+    "remainingRequiredLamports": 175826440,
+    "maxSpendLamports": 500000000
+  },
+  "range": {
+    "tickLower": -1080,
+    "tickUpper": 960,
+    "priceLower": "0.89763244330945058506",
+    "priceUpper": "1.1007537807153331814"
+  },
+  "faucet": {
+    "requestedLamports": 1000000000,
+    "beforeLamports": 5695481960,
+    "status": "unavailable-or-unconfirmed",
+    "message": "airdrop to bnCwyNq3mqquCp3bQksZnrMk7t4wR8iw2NU2x21pjDe failed: Internal error",
+    "creditedLamports": 0
+  },
+  "tokens": [
+    {
+      "label": "GUL-A",
+      "mint": "6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy",
+      "ata": "9DJYtYoDgCQHtDRomRNhSHyAy727m16pXRXPERfX6JjL",
+      "decimals": 6,
+      "supplyRaw": "1000000000000"
+    },
+    {
+      "label": "GUL-B",
+      "mint": "GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1",
+      "ata": "9mEtVt5UsXuYjUSTRPjNSvS4S3APZoKt7aq9VwamCNgR",
+      "decimals": 6,
+      "supplyRaw": "1000000000000"
+    }
+  ],
+  "pool": {
+    "id": "gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf",
+    "config": "CD4aJtX11cqTCAc83nxSPkkh5JW2yjD6uwHeovjqQ1qu",
+    "token0": "6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy",
+    "token1": "GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1",
+    "vault0": "Bu3sjqQQRBurbdRJ85EV6s9odkQfPnAsGYXiBo9kp222",
+    "vault1": "HVpYLZewY65hhhPSPR1koHmERQfXoCqkfudKwtgjiBSo",
+    "observation": "EgrpcnywpsvEiRAZNQsKPKx7Z6s27fyLVwGpPDqCaHbM",
+    "bitmap": "GNbsWc1ZzwfzQoMNJpoUEJdQxDp6Am8JpyxFywWqRUg4",
+    "initialPrice": "1",
+    "initialSqrtPriceX64": "18446744073709551616"
+  },
+  "position": {
+    "nftMint": "ErjZbudrBuoqt66nqm5UQfHuB9m1zWg5PvEwCpmFA9JG",
+    "tickArrayLower": "BjY2zbtvFwx2PWc8hyTJSqgRouD5Y2mci54zgZYLvub6",
+    "tickArrayUpper": "8x9Yg5ep6kAfK3c3y7F3vAvvy8TMkwxB9iVzV9RtK68s",
+    "positionNftAccount": "GiceKAs4mZU6ENRbmiN93e2vzbHFAmyYsSBWhSAmeWDk",
+    "metadataAccount": "572BRus1sQz34iUZHdGckcby6RZc5RWYEXfoVBygrJPb",
+    "personalPosition": "P2fxUUpgMEQfkfbEqyC1t4sTSgw8DM3wW7QCnYKYeTs",
+    "protocolPosition": "4vCbTtS52jCZbzax5mGYt1fyi9FZmNCgG5j3xiQfKVZ5",
+    "tickLower": -1080,
+    "tickUpper": 960,
+    "priceLower": "0.89763244330945058506",
+    "priceUpper": "1.1007537807153331814",
+    "liquidity": "21338374629",
+    "maxAmount0Raw": "1010000001",
+    "maxAmount1Raw": "1132875413",
+    "nftTokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "metadataCreated": false,
+    "spent": {
+      "6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy": "1000000000",
+      "GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1": "1121658824"
+    }
+  },
+  "verification": {
+    "status": "PASS",
+    "verifiedAt": "2026-10-24T18:52:44.781Z",
+    "commitment": "confirmed",
+    "pool": "gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf",
+    "nft": "ErjZbudrBuoqt66nqm5UQfHuB9m1zWg5PvEwCpmFA9JG",
+    "position": "P2fxUUpgMEQfkfbEqyC1t4sTSgw8DM3wW7QCnYKYeTs",
+    "poolLiquidity": "21338374629",
+    "positionLiquidity": "21338374629",
+    "sqrtPriceX64": "18446744073709551616",
+    "priceToken1PerToken0": "1",
+    "tickCurrent": 0,
+    "range": {
+      "lower": "0.89763244330945058506",
+      "upper": "1.1007537807153331814",
+      "tickLower": -1080,
+      "tickUpper": 960
+    },
+    "contributionRaw": {
+      "6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy": "1000000000",
+      "GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1": "1121658824"
+    },
+    "finalBalanceLamports": 5535518320,
+    "totalSpentLamports": 159963640,
+    "transactionFeeLamports": 30000,
+    "balanceSOL": 5.53551832,
+    "spentSOL": 0.15996364
+  }
+}
