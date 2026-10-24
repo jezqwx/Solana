@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token::{self, Mint, MintTo, Token, TokenAccount, TransferChecked},
+    token::{self, Burn, Mint, MintTo, Token, TokenAccount, TransferChecked},
 };
 
 declare_id!("DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9");
@@ -91,6 +91,61 @@ pub mod liquidity_vault {
         ctx.accounts.position.deposited_amount = deposited_amount;
         Ok(())
     }
+
+    pub fn withdraw(
+        ctx: Context<Withdraw>,
+        shares_to_burn: u64,
+        min_assets_out: u64,
+    ) -> Result<()> {
+        // Snapshot the live token balances before burn changes the share supply.
+        let assets_out = calculate_assets_out(
+            shares_to_burn,
+            min_assets_out,
+            ctx.accounts.token_vault.amount,
+            ctx.accounts.share_mint.supply,
+        )?;
+        require!(
+            ctx.accounts.user_share_account.amount >= shares_to_burn,
+            VaultError::InsufficientShareBalance
+        );
+        checked_sub_amount(ctx.accounts.user_share_account.amount, shares_to_burn)?;
+        checked_sub_amount(ctx.accounts.share_mint.supply, shares_to_burn)?;
+        checked_sub_amount(ctx.accounts.token_vault.amount, assets_out)?;
+        checked_add_amount(ctx.accounts.user_asset_account.amount, assets_out)?;
+
+        token::burn(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                Burn {
+                    mint: ctx.accounts.share_mint.to_account_info(),
+                    from: ctx.accounts.user_share_account.to_account_info(),
+                    authority: ctx.accounts.user.to_account_info(),
+                },
+            ),
+            shares_to_burn,
+        )?;
+
+        let asset_mint_key = ctx.accounts.asset_mint.key();
+        let bump = [ctx.accounts.vault.bump];
+        let vault_seeds: &[&[u8]] = &[b"vault", asset_mint_key.as_ref(), &bump];
+        token::transfer_checked(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                TransferChecked {
+                    from: ctx.accounts.token_vault.to_account_info(),
+                    mint: ctx.accounts.asset_mint.to_account_info(),
+                    to: ctx.accounts.user_asset_account.to_account_info(),
+                    authority: ctx.accounts.vault.to_account_info(),
+                },
+                &[vault_seeds],
+            ),
+            assets_out,
+            ctx.accounts.asset_mint.decimals,
+        )?;
+
+        // Historical deposit counters are read-only, including for transferred shares.
+        Ok(())
+    }
 }
 
 fn calculate_shares(amount: u64, min_shares_out: u64, assets: u64, supply: u64) -> Result<u64> {
@@ -114,6 +169,37 @@ fn calculate_shares(amount: u64, min_shares_out: u64, assets: u64, supply: u64) 
 fn checked_add_amount(balance: u64, amount: u64) -> Result<u64> {
     balance
         .checked_add(amount)
+        .ok_or_else(|| error!(VaultError::ArithmeticOverflow))
+}
+
+fn calculate_assets_out(
+    shares_to_burn: u64,
+    min_assets_out: u64,
+    assets: u64,
+    supply: u64,
+) -> Result<u64> {
+    require!(shares_to_burn > 0, VaultError::ZeroWithdrawal);
+    require!(assets > 0 && supply > 0, VaultError::InvalidVaultState);
+    require!(
+        shares_to_burn <= supply,
+        VaultError::InsufficientShareBalance
+    );
+    let value = u128::from(shares_to_burn)
+        .checked_mul(u128::from(assets))
+        .and_then(|product| product.checked_div(u128::from(supply)))
+        .ok_or(VaultError::ArithmeticOverflow)?;
+    let assets_out = u64::try_from(value).map_err(|_| error!(VaultError::ArithmeticOverflow))?;
+    require!(assets_out > 0, VaultError::ZeroAssetsOut);
+    require!(
+        assets_out >= min_assets_out,
+        VaultError::WithdrawalSlippageExceeded
+    );
+    Ok(assets_out)
+}
+
+fn checked_sub_amount(balance: u64, amount: u64) -> Result<u64> {
+    balance
+        .checked_sub(amount)
         .ok_or_else(|| error!(VaultError::ArithmeticOverflow))
 }
 
@@ -232,6 +318,59 @@ pub struct Deposit<'info> {
     pub token_program: Program<'info, Token>,
 }
 
+#[derive(Accounts)]
+pub struct Withdraw<'info> {
+    pub user: Signer<'info>,
+    #[account(
+        seeds = [b"vault", asset_mint.key().as_ref()],
+        bump = vault.bump,
+        has_one = asset_mint @ VaultError::InvalidAssetMint,
+        has_one = share_mint @ VaultError::InvalidShareMint,
+        has_one = token_vault @ VaultError::InvalidTokenVault
+    )]
+    pub vault: Box<Account<'info, VaultConfig>>,
+    #[account(
+        seeds = [b"position", vault.key().as_ref(), user.key().as_ref()],
+        bump = position.bump,
+        constraint = position.owner == user.key() @ VaultError::InvalidPositionOwner,
+        has_one = vault @ VaultError::InvalidPositionVault
+    )]
+    pub position: Box<Account<'info, UserPosition>>,
+    pub asset_mint: Box<Account<'info, Mint>>,
+    #[account(
+        mut,
+        seeds = [b"share-mint", vault.key().as_ref()],
+        bump,
+        mint::authority = vault,
+        mint::decimals = asset_mint.decimals,
+        mint::token_program = token_program,
+        constraint = share_mint.freeze_authority.is_none() @ VaultError::ShareMintFreezeAuthoritySet
+    )]
+    pub share_mint: Box<Account<'info, Mint>>,
+    #[account(
+        mut,
+        associated_token::mint = asset_mint,
+        associated_token::authority = vault,
+        associated_token::token_program = token_program
+    )]
+    pub token_vault: Box<Account<'info, TokenAccount>>,
+    #[account(
+        mut,
+        token::mint = asset_mint,
+        token::authority = user,
+        token::token_program = token_program
+    )]
+    pub user_asset_account: Box<Account<'info, TokenAccount>>,
+    #[account(
+        mut,
+        token::mint = share_mint,
+        token::authority = user,
+        token::token_program = token_program
+    )]
+    pub user_share_account: Box<Account<'info, TokenAccount>>,
+    pub token_program: Program<'info, Token>,
+}
+
 #[account]
 #[derive(InitSpace)]
 pub struct VaultConfig {
@@ -280,6 +419,14 @@ pub enum VaultError {
     InvalidPositionOwner,
     #[msg("Position belongs to a different vault.")]
     InvalidPositionVault,
+    #[msg("Shares to burn must be greater than zero.")]
+    ZeroWithdrawal,
+    #[msg("Requested shares exceed the user's share balance or total share supply.")]
+    InsufficientShareBalance,
+    #[msg("Withdrawal would return zero assets; increase the shares to burn.")]
+    ZeroAssetsOut,
+    #[msg("Calculated assets are below min_assets_out.")]
+    WithdrawalSlippageExceeded,
 }
 
 #[cfg(test)]
@@ -324,5 +471,65 @@ mod deposit_math_tests {
         );
         assert_eq!(checked_add_amount(u64::MAX - 1, 1).unwrap(), u64::MAX);
         assert_error(checked_add_amount(u64::MAX, 1), "ArithmeticOverflow");
+    }
+}
+
+#[cfg(test)]
+mod withdraw_math_tests {
+    use super::*;
+
+    fn assert_error(result: Result<u64>, expected: &str) {
+        match result.unwrap_err() {
+            anchor_lang::error::Error::AnchorError(error) => {
+                assert_eq!(error.error_name, expected);
+            }
+            error => panic!("Unexpected error: {error}"),
+        }
+    }
+
+    #[test]
+    fn proportional_rounding_and_last_holder() {
+        assert_eq!(calculate_assets_out(50, 50, 100, 100).unwrap(), 50);
+        assert_eq!(calculate_assets_out(33, 49, 151, 100).unwrap(), 49);
+        assert_eq!(calculate_assets_out(67, 102, 102, 67).unwrap(), 102);
+        assert_eq!(calculate_assets_out(100, 151, 151, 100).unwrap(), 151);
+    }
+
+    #[test]
+    fn rejects_zero_invalid_supply_and_slippage() {
+        assert_error(calculate_assets_out(0, 0, 100, 100), "ZeroWithdrawal");
+        assert_error(calculate_assets_out(1, 0, 0, 0), "InvalidVaultState");
+        assert_error(calculate_assets_out(1, 0, 100, 0), "InvalidVaultState");
+        assert_error(calculate_assets_out(1, 0, 0, 100), "InvalidVaultState");
+        assert_error(
+            calculate_assets_out(101, 0, 100, 100),
+            "InsufficientShareBalance",
+        );
+        assert_error(calculate_assets_out(1, 0, 1, 100), "ZeroAssetsOut");
+        assert_error(
+            calculate_assets_out(33, 50, 151, 100),
+            "WithdrawalSlippageExceeded",
+        );
+    }
+
+    #[test]
+    fn uses_u128_and_checks_balance_boundaries() {
+        assert_eq!(
+            calculate_assets_out(u64::MAX, u64::MAX, u64::MAX, u64::MAX).unwrap(),
+            u64::MAX
+        );
+        assert_eq!(
+            calculate_assets_out(u64::MAX - 1, 0, u64::MAX, u64::MAX).unwrap(),
+            u64::MAX - 1
+        );
+        assert_eq!(checked_sub_amount(u64::MAX, u64::MAX).unwrap(), 0);
+        assert_error(checked_sub_amount(0, 1), "ArithmeticOverflow");
+        assert_error(checked_add_amount(u64::MAX, 1), "ArithmeticOverflow");
+    }
+
+    #[test]
+    fn existing_account_sizes_are_unchanged() {
+        assert_eq!(8 + VaultConfig::INIT_SPACE, 145);
+        assert_eq!(8 + UserPosition::INIT_SPACE, 81);
     }
 }

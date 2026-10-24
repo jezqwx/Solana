@@ -1,10 +1,11 @@
-# Liquidity Vault — Week 8 skeleton + Week 9 Deposit
+# Liquidity Vault — Week 8 skeleton, Week 9 Deposit, Week 10 Withdraw
 
 Существующий проект Anchor **0.31.1**. Program ID:
 `DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9`.
 `anchor-lang` и `anchor-spl` закреплены на 0.31.1; SPL features:
 `token`, `associated_token`, `mint`. Используется классический SPL Token Program,
-без Token-2022. Week 9 добавляет deposit и выпуск shares. Withdraw пока отсутствует.
+без Token-2022. Week 9 добавляет deposit и выпуск shares; Week 10 — withdraw
+со сжиганием shares и возвратом asset-токенов через CPI.
 
 ## Архитектура аккаунтов
 
@@ -128,11 +129,140 @@ account в Token Vault с подписью пользователя. Затем 
   присвоения этих активов первому вкладчику или механизма восстановления нет.
   Аналогичное состояние возможно после сжигания всех shares их держателями.
 - Shares можно переводить и сжигать. `deposited_amount` — история депозитов,
-  а не текущая доля пользователя; будущий withdraw должен учитывать shares.
+  а не текущая доля пользователя; withdraw использует реальный баланс shares.
 - Asset mint может иметь freeze authority: его администратор способен
   заморозить token accounts и остановить переводы.
-- Withdraw отсутствует: внесённые активы пока нельзя вывести через программу.
-  Используйте только отдельные тестовые mint на Devnet, не реальные активы.
+- Используйте только отдельные тестовые mint на Devnet, не реальные активы.
+
+## Week 10 — withdraw(shares_to_burn: u64, min_assets_out: u64)
+
+`shares_to_burn` — количество shares в минимальных единицах share mint;
+`min_assets_out` — минимальная выплата в минимальных единицах asset mint.
+Для TypeScript используйте `anchor.BN`, для больших u64 — строковое представление.
+
+До выполнения CPI считываются текущий баланс Token Vault и supply ShareMint:
+
+```text
+B = shares_to_burn
+A = token_vault.amount до burn/transfer
+S = share_mint.supply до burn/transfer
+assets_out = floor(B * A / S)
+```
+
+Расчёт использует checked-арифметику u128 и проверяемое преобразование в u64.
+Проверяются `B > 0`, `A > 0`, `S > 0`, `B <= S`, достаточный баланс shares
+пользователя, ненулевая выплата и `assets_out >= min_assets_out`.
+До CPI также проверяются вычитания из token balances/supply и переполнение
+asset balance получателя. `min_assets_out=0` разрешает любой положительный
+результат, но не отключает остальные проверки.
+
+Пример: A=151, S=100, B=33 даёт 49 asset units. После вывода A=102 и S=67;
+последние 67 shares возвращают все оставшиеся 102 units. При B=S vault полностью
+опустошается без остатка округления. Последующий deposit при A=S=0 снова выпускает
+shares 1:1, продолжая накопление истории депозитов.
+
+### Право на вывод и исторические счётчики
+
+**`VaultConfig.total_deposited` и `UserPosition.deposited_amount` — исторические
+накопительные показатели. Withdraw НЕ уменьшает и вообще НЕ записывает их.**
+Они не являются текущим балансом, лимитом вывода или оценкой доли пользователя.
+Donation может увеличить выплату сверх исторического депозита. Получатель
+переведённых shares вправе вывести их, даже если его `deposited_amount=0`.
+Он предварительно открывает свою позицию через `open_position` и создаёт asset
+token account. Право на вывод определяется подписью owner и балансом его
+share token account; делегат вместо owner не принимается.
+
+`Withdraw` использует те же девять имён аккаунтов и проверки связей, что `Deposit`.
+`vault` и `position` в Withdraw **readonly**; asset mint и Token Program также
+readonly. Share mint, Token Vault и оба пользовательских token accounts writable.
+PDA/ATA, mint, program owner, token authority, подпись пользователя и принадлежность
+позиции проверяются до CPI. Аккаунты обёрнуты в `Box<Account<...>>` для SBF-стека.
+Структуры и размеры остаются прежними: VaultConfig 145 байт, UserPosition 81 байт.
+Новых аккаунтов состояния, статистических PDA, миграции, realloc и закрытия
+существующих аккаунтов нет. Program ID и все прежние seeds сохранены.
+
+### Два CPI и inner instructions
+
+CPI (Cross-Program Invocation) — вызов другой программы внутри текущей инструкции.
+Внешняя инструкция `Liquidity Vault: withdraw` последовательно вызывает:
+
+1. SPL Token `Burn`: сжечь B shares из `user_share_account` в `share_mint`;
+   authority=`user`. Используется подпись пользователя из внешней транзакции.
+2. SPL Token `TransferChecked`: перевести `assets_out` из `token_vault` в
+   `user_asset_account`; mint=`asset_mint`, decimals берутся из mint;
+   authority=`vault`. Программа использует `CpiContext::new_with_signer` и seeds
+   `[b"vault", asset_mint.key().as_ref(), &[vault.bump]]`.
+
+У PDA нет приватного ключа: runtime проверяет seeds относительно Program ID и
+предоставляет PDA полномочия signer только для CPI. Inner instructions не имеют
+отдельных transaction signatures — оба CPI относятся к одной внешней транзакции.
+Mint authority Vault PDA не требуется для burn собственных shares пользователем.
+
+Ошибка второго CPI откатывает также первый: burn и transfer атомарны.
+Внутри handler расчёт производится по состоянию до CPI; устаревшие значения
+десериализованных SPL-аккаунтов после CPI не используются. В клиентских проверках
+состояние читается повторно после подтверждения транзакции.
+
+Новые ошибки добавлены после прежних, сохраняя их номера: `ZeroWithdrawal`,
+`InsufficientShareBalance`, `ZeroAssetsOut`, `WithdrawalSlippageExceeded`.
+Переиспользуются `InvalidVaultState`, `ArithmeticOverflow` и ошибки аккаунтов.
+
+### Проверка вывода в Solana Explorer
+
+После отдельно разрешённого Devnet-запуска:
+
+1. Скопировать подпись из `[withdraw] Transaction submitted` и открыть
+   `https://explorer.solana.com/tx/<SIGNATURE>?cluster=devnet`.
+2. Проверить сеть Devnet, успешный статус и Program ID Liquidity Vault у внешней
+   инструкции. До выполнения сверки убедиться, что транзакция подтверждена.
+3. В деталях инструкции раскрыть inner instructions: сначала SPL Token Burn,
+   затем TransferChecked. Сверить mint, source, destination, authority и суммы.
+4. В логах проверить последовательность вызовов Token Program и успешное
+   завершение обеих CPI и внешней инструкции. PDA vault не должен фигурировать
+   как отдельная подпись кошелька транзакции.
+5. По token balance changes сверить: shares пользователя уменьшились на B,
+   asset balance vault уменьшился на assets_out, asset balance пользователя
+   увеличился на assets_out. Supply share mint после burn уменьшается на B;
+   состояние mint в Explorer показывает уже текущий supply и может включать
+   более поздние транзакции.
+6. Исторические счётчики и размеры VaultConfig/UserPosition проверить через
+   Anchor account fetch или декодирование данных: они не меняются при withdraw.
+
+Если Explorer не декодирует название withdraw без опубликованного IDL, сверяйте
+Program ID и локальный `target/idl/liquidity_vault.json`; SPL inner instructions
+проверяйте отдельно по Token Program, аккаунтам и суммам.
+
+Программно аналогичная проверка использует `getParsedTransaction` и
+`meta.innerInstructions`: поле `index` указывает внешнюю инструкцию, а вложенные
+parsed-типы — `burn` и `transferChecked`. Общий helper сохраняет подписанный
+blockhash, оставляет preflight включённым и не повторяет отправку автоматически.
+
+### Тесты Week 10 и ограничения
+
+Новая вложенная группа `Week 10 — withdraw` переиспользует подготовку Week 9;
+пять прежних интеграционных тестов Week 8–9 сохранены. Пять новых сценариев:
+
+- частичный/полный вывод после donation, округление, CPI metadata, сохранение
+  исторических аккаунтов байт-в-байт и новый deposit после опустошения vault;
+- вывод переданных shares другим пользователем с нулевой историей депозитов;
+- нулевой запрос, пустой vault, превышение supply/личного баланса и slippage;
+- подмена mint, PDA, token accounts, owner, Token Program и отсутствие подписи;
+- ошибка TransferChecked после Burn в preflight при замороженном asset account:
+  проверяются логи обоих CPI, неизменность состояния и успешный полный вывод
+  после thaw. Preflight не отключается; ошибочная транзакция не публикуется.
+
+В Rust добавлены четыре локальных теста: формула/округление/последний держатель,
+отказы и slippage, границы u128/u64 и сохранение размеров аккаунтов. `ZeroAssetsOut`
+проверяется локально на A<S: обычная последовательность операций Week 8–10
+без потерь активов такого состояния не создаёт. Добавленные тесты в рамках
+реализации не запускались отдельно; выполнялись только локальные проверки сборки.
+
+Остаются ограничения: donation до первого депозита и внешнее сжигание всех shares
+могут оставить A>0/S=0 без доступного вывода; механизм восстановления не добавлен.
+Asset freeze authority может блокировать переводы. Нулевой min_assets_out не
+защищает от невыгодного курса. Публичный RPC может вернуть 429 или временно не
+предоставить metadata подтверждённой транзакции; это ошибка инфраструктуры, а не
+успешный негативный тест. Слепые повторы транзакций не используются.
 
 ## Команды
 
@@ -163,10 +293,11 @@ token accounts/owner/program и предзаполненный vault с нуле
 В `lib.rs` добавлены три unit-теста расчёта: округление/1:1, отказы/нижний предел,
 u128-произведение и границы u64. В рамках реализации Week 9 отдельно они не запускались.
 
-Без `RUN_DEVNET_INTEGRATION=1` Mocha пропускает обе группы. Перед первой транзакцией
-каждая группа проверяет полный genesis hash Devnet и ожидаемый Program ID.
-Week 8 сохранён, включая raw-send для initialize и существующий `.rpc()` для
-openPosition. Новые транзакции Week 9 используют `.transaction()`/инструкции,
+Без `RUN_DEVNET_INTEGRATION=1` Mocha пропускает все группы. Перед первой транзакцией
+верхнеуровневая группа проверяет полный genesis hash Devnet и ожидаемый Program ID;
+вложенная Week 10 наследует эту проверку из setup Week 9.
+Week 8 использует raw-send для initialize и общий helper для openPosition.
+Транзакции Week 9–10 используют `.transaction()`/инструкции,
 свежий blockhash `confirmed`, подпись кошельком, `sendRawTransaction` с включённым
 preflight и `maxRetries=0`, затем `confirmTransaction` с тем же blockhash и
 lastValidBlockHeight. Проверяется `confirmation.value.err`; диагностика выводит
@@ -183,10 +314,10 @@ yarn ts-mocha -p ./tsconfig.json -t 1000000 tests/liquidity_vault.ts
 ```
 
 Эта команда отправляет транзакции и расходует Devnet SOL на комиссии и rent.
-При реализации Week 9 эта команда, Devnet-транзакции, `anchor deploy` и `anchor test`
+При реализации Week 10 эта команда, Devnet-транзакции, `anchor deploy` и `anchor test`
 не выполнялись. Локальная сборка сама по себе не обновляет развёрнутую программу:
 для будущего ручного тестирования нужна отдельно согласованная публикация версии
-с инструкцией deposit. `Anchor.toml` настроен на Devnet и кошелёк
+с инструкцией withdraw. `Anchor.toml` настроен на Devnet и кошелёк
 `~/.config/solana/jezqwx/id.json`; это публичная тестовая сеть, не mainnet.
 Не используйте реальные активы или основной кошелёк. Не публикуйте seed phrase,
 private keys, wallet JSON или `target/deploy/liquidity_vault-keypair.json`.
@@ -201,9 +332,12 @@ Program keypair и Program ID должны оставаться прежними
 - initialize_vault transaction: _добавить после ручного теста_
 - open_position transaction: _добавить после ручного теста_
 - deposit transactions: _добавить после ручного теста Week 9_
+- withdraw transactions / inner instructions: _добавить после ручного теста Week 10_
 
 Шаблоны: `https://explorer.solana.com/address/<ADDRESS>?cluster=devnet` и
 `https://explorer.solana.com/tx/<SIGNATURE>?cluster=devnet`.
 Наличие ссылки на программу не подтверждает deployment этой версии.
 
 Справка: [исходники Anchor v0.31.1](https://github.com/coral-xyz/anchor/tree/v0.31.1).
+Описание CPI: https://solana.com/docs/core/cpi.
+Атомарность транзакций: https://solana.com/docs/core/transactions.

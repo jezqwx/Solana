@@ -6,10 +6,12 @@ import {
   MINT_SIZE,
   TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
+  createFreezeAccountInstruction,
   createInitializeMintInstruction,
   createMint,
   createMintToInstruction,
   createTransferCheckedInstruction,
+  createThawAccountInstruction,
   getAccount,
   getAssociatedTokenAddressSync,
   getMint,
@@ -21,7 +23,7 @@ import { LiquidityVault } from "../target/types/liquidity_vault";
 const describeIntegration =
   process.env.RUN_DEVNET_INTEGRATION === "1" ? describe : describe.skip;
 
-// Shared raw-send strategy: preserve the signed blockhash, no retries.
+// Shared raw-send strategy: preserve the signed blockhash, never resubmit a transaction.
 async function sendTransactionWithDiagnostics(
   provider: anchor.AnchorProvider,
   label: string,
@@ -57,15 +59,64 @@ async function sendTransactionWithDiagnostics(
       }
     );
     console.log(`[${label}] Transaction submitted:`, signature);
-    const confirmation = await provider.connection.confirmTransaction(
-      { signature, ...latest },
-      "confirmed"
-    );
-    if (confirmation.value.err !== null) {
+    let confirmationError: anchor.web3.SignatureResult["err"];
+    try {
+      const confirmation = await provider.connection.confirmTransaction(
+        { signature, ...latest },
+        "confirmed"
+      );
+      confirmationError = confirmation.value.err;
+    } catch (confirmationFailure: unknown) {
+      console.warn(
+        `[${label}] Confirmation failed; checking the existing signature once:`,
+        signature,
+        confirmationFailure instanceof Error
+          ? confirmationFailure.message
+          : String(confirmationFailure)
+      );
+      // Read-only recovery: expiry/429 can hide a transaction that already landed.
+      // Never fetch a new blockhash, re-sign or resend on this path.
+      let status: anchor.web3.SignatureStatus | null;
+      try {
+        const statuses = await provider.connection.getSignatureStatuses(
+          [signature],
+          { searchTransactionHistory: true }
+        );
+        status = statuses.value[0];
+      } catch (statusFailure: unknown) {
+        console.error(
+          `[${label}] Signature status unavailable; not resending:`,
+          signature,
+          statusFailure instanceof Error
+            ? statusFailure.message
+            : String(statusFailure)
+        );
+        throw confirmationFailure;
+      }
+      if (
+        !status ||
+        (status.confirmationStatus !== "confirmed" &&
+          status.confirmationStatus !== "finalized")
+      ) {
+        console.error(`[${label}] Confirmation unresolved; not resending:`, {
+          signature,
+          confirmationStatus: status?.confirmationStatus ?? "unknown",
+          err: status?.err,
+        });
+        throw confirmationFailure;
+      }
+      console.log(`[${label}] Existing signature status:`, {
+        signature,
+        confirmationStatus: status.confirmationStatus,
+        err: status.err,
+      });
+      confirmationError = status.err;
+    }
+    if (confirmationError !== null) {
       throw new anchor.web3.SendTransactionError({
         action: "send",
         signature,
-        transactionMessage: JSON.stringify(confirmation.value.err),
+        transactionMessage: JSON.stringify(confirmationError),
       });
     }
     return signature;
@@ -407,7 +458,9 @@ describeIntegration(
       return sendTransactionWithDiagnostics(provider, label, transaction, signers);
     }
 
-    async function createFixture(): Promise<DepositAccounts> {
+    async function createFixture(
+      withFreezeAuthority = false
+    ): Promise<DepositAccounts> {
       const user = provider.wallet.publicKey;
       const mintKeypair = anchor.web3.Keypair.generate();
       const assetMint = mintKeypair.publicKey;
@@ -449,7 +502,12 @@ describeIntegration(
             space: MINT_SIZE,
             programId: TOKEN_PROGRAM_ID,
           }),
-          createInitializeMintInstruction(assetMint, 6, user, null)
+          createInitializeMintInstruction(
+            assetMint,
+            6,
+            user,
+            withFreezeAuthority ? user : null
+          )
         ),
         [mintKeypair]
       );
@@ -774,6 +832,393 @@ describeIntegration(
       const accounts = await createFixture();
       await donate(accounts, 1);
       await expectDepositError(accounts, 10, 0, "InvalidVaultState");
+    });
+
+    // Reuse the opt-in Devnet setup and isolated fixtures; Week 8–9 cases stay intact.
+    describe("Week 10 — withdraw", () => {
+      async function withdraw(
+        accounts: DepositAccounts,
+        shares: number,
+        minimum: number,
+        signers: anchor.web3.Keypair[] = []
+      ) {
+        return send(
+          "withdraw",
+          await program.methods
+            .withdraw(new anchor.BN(shares), new anchor.BN(minimum))
+            .accountsStrict(accounts)
+            .transaction(),
+          signers
+        );
+      }
+
+      async function snapshot(addresses: anchor.web3.PublicKey[]) {
+        return (
+          await provider.connection.getMultipleAccountsInfo(addresses, "confirmed")
+        ).map(
+          (info) =>
+            info && {
+              owner: info.owner.toBase58(),
+              data: info.data.toString("base64"),
+            }
+        );
+      }
+
+      async function expectWithdrawError(
+        accounts: DepositAccounts,
+        shares: number,
+        minimum: number,
+        expected: string,
+        overrides: Partial<DepositAccounts> = {},
+        omitUserSigner = false
+      ) {
+        const addresses = [
+          accounts.vault,
+          accounts.position,
+          accounts.assetMint,
+          accounts.shareMint,
+          accounts.tokenVault,
+          accounts.userAssetAccount,
+          accounts.userShareAccount,
+          ...Object.values(overrides),
+        ];
+        const before = await snapshot(addresses);
+        const supplied = { ...accounts, ...overrides };
+        const transaction = await program.methods
+          .withdraw(new anchor.BN(shares), new anchor.BN(minimum))
+          .accountsStrict(supplied)
+          .transaction();
+        if (omitUserSigner) {
+          // The fee payer is a different user. Exercise the on-chain Signer check.
+          assert.isFalse(supplied.user.equals(provider.wallet.publicKey));
+          for (const instruction of transaction.instructions) {
+            for (const key of instruction.keys) {
+              if (key.pubkey.equals(supplied.user)) key.isSigner = false;
+            }
+          }
+        }
+        let failure: unknown;
+        try {
+          await send("withdraw: expected rejection", transaction);
+        } catch (error: unknown) {
+          failure = error;
+        }
+        assert.exists(failure, `Expected ${expected}`);
+        const logs = (failure as { logs?: string[] })?.logs ?? [];
+        assert.include(logs.join("\n"), `Error Code: ${expected}.`);
+        assert.deepEqual(
+          await snapshot(addresses),
+          before,
+          "Rejected withdrawal changed state"
+        );
+      }
+
+      async function assertInnerInstructions(
+        signature: string,
+        accounts: DepositAccounts,
+        shares: number,
+        assets: number
+      ) {
+        const transaction = await provider.connection.getParsedTransaction(
+          signature,
+          {
+            commitment: "confirmed",
+            maxSupportedTransactionVersion: 0,
+          }
+        );
+        assert.isNotNull(
+          transaction,
+          "Confirmed transaction metadata is unavailable from RPC"
+        );
+        assert.isNotNull(transaction!.meta);
+        assert.isNull(transaction!.meta!.err);
+        const index = transaction!.transaction.message.instructions.findIndex(
+          (instruction) => instruction.programId.equals(program.programId)
+        );
+        assert.isAtLeast(index, 0);
+        const group = transaction!.meta!.innerInstructions?.find(
+          (entry) => entry.index === index
+        );
+        assert.exists(group, "Missing withdraw inner instructions");
+        const tokenInstructions = group!.instructions.filter(
+          (instruction): instruction is anchor.web3.ParsedInstruction =>
+            instruction.programId.equals(TOKEN_PROGRAM_ID) &&
+            "parsed" in instruction
+        );
+        assert.deepEqual(
+          tokenInstructions.map((instruction) => instruction.parsed.type),
+          ["burn", "transferChecked"]
+        );
+        const burn = tokenInstructions[0].parsed.info;
+        assert.equal(burn.account, accounts.userShareAccount.toBase58());
+        assert.equal(burn.mint, accounts.shareMint.toBase58());
+        assert.equal(burn.authority, accounts.user.toBase58());
+        assert.equal(burn.amount, shares.toString());
+        const transfer = tokenInstructions[1].parsed.info;
+        assert.equal(transfer.source, accounts.tokenVault.toBase58());
+        assert.equal(transfer.destination, accounts.userAssetAccount.toBase58());
+        assert.equal(transfer.mint, accounts.assetMint.toBase58());
+        assert.equal(transfer.authority, accounts.vault.toBase58());
+        assert.equal(transfer.tokenAmount.amount, assets.toString());
+        assert.equal(transfer.tokenAmount.decimals, 6);
+      }
+
+      it("withdraws partially and fully after donation, preserves history and allows a new deposit", async () => {
+        const accounts = await createFixture();
+        await deposit(accounts, 100, 100);
+        await donate(accounts, 51);
+        const history = await snapshot([accounts.vault, accounts.position]);
+        assert.equal(Buffer.from(history[0]!.data, "base64").length, 145);
+        assert.equal(Buffer.from(history[1]!.data, "base64").length, 81);
+        const signature = await withdraw(accounts, 33, 49); // floor(33 * 151 / 100) = 49.
+        assert.deepEqual(await balances(accounts), {
+          total: "100",
+          deposited: "100",
+          supply: "67",
+          assets: "102",
+          userAssets: "999898",
+          userShares: "67",
+        });
+        assert.deepEqual(
+          await snapshot([accounts.vault, accounts.position]),
+          history
+        );
+        await assertInnerInstructions(signature, accounts, 33, 49);
+        await withdraw(accounts, 67, 102); // Last holder receives the rounding remainder.
+        assert.deepEqual(await balances(accounts), {
+          total: "100",
+          deposited: "100",
+          supply: "0",
+          assets: "0",
+          userAssets: "1000000",
+          userShares: "0",
+        });
+        assert.deepEqual(
+          await snapshot([accounts.vault, accounts.position]),
+          history
+        );
+        await deposit(accounts, 20, 20);
+        assert.deepEqual(await balances(accounts), {
+          total: "120",
+          deposited: "120",
+          supply: "20",
+          assets: "20",
+          userAssets: "999980",
+          userShares: "20",
+        });
+      });
+
+      it("lets a recipient withdraw transferred shares with zero deposit history", async () => {
+        const accounts = await createFixture();
+        await deposit(accounts, 100, 100);
+        const other = await secondUser(accounts);
+        await send(
+          "Week 10: transfer shares",
+          new anchor.web3.Transaction().add(
+            createTransferCheckedInstruction(
+              accounts.userShareAccount,
+              accounts.shareMint,
+              other.accounts.userShareAccount,
+              accounts.user,
+              40,
+              6
+            )
+          )
+        );
+        const history = await snapshot([
+          accounts.vault,
+          accounts.position,
+          other.accounts.position,
+        ]);
+        await withdraw(other.accounts, 40, 40, [other.signer]);
+        assert.deepEqual(await balances(other.accounts), {
+          total: "100",
+          deposited: "0",
+          supply: "60",
+          assets: "60",
+          userAssets: "1000040",
+          userShares: "0",
+        });
+        assert.deepEqual(await balances(accounts), {
+          total: "100",
+          deposited: "100",
+          supply: "60",
+          assets: "60",
+          userAssets: "999900",
+          userShares: "60",
+        });
+        await withdraw(accounts, 60, 60);
+        assert.deepEqual(await balances(accounts), {
+          total: "100",
+          deposited: "100",
+          supply: "0",
+          assets: "0",
+          userAssets: "999960",
+          userShares: "0",
+        });
+        assert.deepEqual(
+          await snapshot([
+            accounts.vault,
+            accounts.position,
+            other.accounts.position,
+          ]),
+          history
+        );
+      });
+
+      it("rejects zero, empty vault, excess shares and slippage without changing state", async () => {
+        const accounts = await createFixture();
+        await expectWithdrawError(accounts, 0, 0, "ZeroWithdrawal");
+        await expectWithdrawError(accounts, 1, 0, "InvalidVaultState");
+        await deposit(accounts, 100, 100);
+        await expectWithdrawError(accounts, 101, 0, "InsufficientShareBalance");
+        await expectWithdrawError(accounts, 50, 51, "WithdrawalSlippageExceeded");
+        const other = await secondUser(accounts);
+        await send(
+          "Week 10: transfer shares for balance check",
+          new anchor.web3.Transaction().add(
+            createTransferCheckedInstruction(
+              accounts.userShareAccount,
+              accounts.shareMint,
+              other.accounts.userShareAccount,
+              accounts.user,
+              40,
+              6
+            )
+          )
+        );
+        // Total supply is still 100, but this user owns only 60.
+        await expectWithdrawError(accounts, 61, 0, "InsufficientShareBalance");
+      });
+
+      it("rejects substituted accounts and a missing user signature", async () => {
+        const accounts = await createFixture();
+        await deposit(accounts, 100, 100);
+        const other = await secondUser(accounts);
+        const cases: Array<[Partial<DepositAccounts>, string]> = [
+          [{ assetMint: accounts.shareMint }, "ConstraintSeeds"],
+          [{ shareMint: accounts.assetMint }, "InvalidShareMint"],
+          [{ tokenVault: accounts.userAssetAccount }, "InvalidTokenVault"],
+          [{ position: other.accounts.position }, "ConstraintSeeds"],
+          [{ userAssetAccount: accounts.userShareAccount }, "ConstraintTokenMint"],
+          [
+            { userAssetAccount: other.accounts.userAssetAccount },
+            "ConstraintTokenOwner",
+          ],
+          [{ userShareAccount: accounts.userAssetAccount }, "ConstraintTokenMint"],
+          [
+            { userShareAccount: other.accounts.userShareAccount },
+            "ConstraintTokenOwner",
+          ],
+          [
+            { tokenProgram: anchor.web3.SystemProgram.programId },
+            "InvalidProgramId",
+          ],
+        ];
+        for (const [overrides, expected] of cases) {
+          await expectWithdrawError(accounts, 10, 10, expected, overrides);
+        }
+        await expectWithdrawError(
+          other.accounts,
+          1,
+          0,
+          "AccountNotSigner",
+          {},
+          true
+        );
+      });
+
+      it("does not lose shares when asset transfer fails after burn during preflight", async () => {
+        const accounts = await createFixture(true);
+        await deposit(accounts, 100, 100);
+        await send(
+          "Week 10: freeze destination",
+          new anchor.web3.Transaction().add(
+            createFreezeAccountInstruction(
+              accounts.userAssetAccount,
+              accounts.assetMint,
+              accounts.user
+            )
+          )
+        );
+        const addresses = [
+          accounts.vault,
+          accounts.position,
+          accounts.shareMint,
+          accounts.tokenVault,
+          accounts.userAssetAccount,
+          accounts.userShareAccount,
+        ];
+        const before = await snapshot(addresses);
+        let failure: unknown;
+        try {
+          await withdraw(accounts, 40, 40);
+        } catch (error: unknown) {
+          failure = error;
+        }
+        assert.exists(
+          failure,
+          "Expected frozen destination to reject the asset transfer"
+        );
+        const logs = (failure as { logs?: string[] })?.logs ?? [];
+        // Instruction-name msg! logs are optional. Runtime invoke/success/failed
+        // markers establish the two direct CPIs of this withdraw instruction.
+        const vaultProgram = program.programId.toBase58();
+        const tokenProgram = TOKEN_PROGRAM_ID.toBase58();
+        const outerStart = logs.indexOf(`Program ${vaultProgram} invoke [1]`);
+        assert.isAtLeast(outerStart, 0, "Withdraw must be invoked in preflight");
+        const outerFailure = logs.findIndex(
+          (line, index) =>
+            index > outerStart &&
+            line.startsWith(`Program ${vaultProgram} failed:`)
+        );
+        assert.isAbove(outerFailure, outerStart, "Withdraw must fail in preflight");
+        const cpiStarts = logs.reduce<number[]>((indices, line, index) => {
+          if (
+            index > outerStart && index < outerFailure &&
+            line === `Program ${tokenProgram} invoke [2]`
+          ) indices.push(index);
+          return indices;
+        }, []);
+        assert.lengthOf(cpiStarts, 2, "Withdraw must invoke Token Program exactly twice");
+        // The verified handler executes burn first, then transfer_checked.
+        const burnLogs = logs.slice(cpiStarts[0], cpiStarts[1]);
+        const transferLogs = logs.slice(cpiStarts[1], outerFailure);
+        assert.include(burnLogs, `Program ${tokenProgram} success`, "First CPI must succeed");
+        assert.isFalse(
+          burnLogs.some((line) => line.startsWith(`Program ${tokenProgram} failed:`))
+        );
+        assert.isTrue(
+          transferLogs.some((line) => line.startsWith(`Program ${tokenProgram} failed:`)),
+          "Second CPI must fail"
+        );
+        assert.notInclude(transferLogs, `Program ${tokenProgram} success`);
+        assert.match(
+          transferLogs.join("\n"), /account is frozen/i,
+          "Frozen-account error must belong to the second CPI"
+        );
+        assert.deepEqual(await snapshot(addresses), before);
+        // Preflight remained enabled: no failed transaction was submitted to the chain.
+        await send(
+          "Week 10: thaw destination",
+          new anchor.web3.Transaction().add(
+            createThawAccountInstruction(
+              accounts.userAssetAccount,
+              accounts.assetMint,
+              accounts.user
+            )
+          )
+        );
+        await withdraw(accounts, 100, 100);
+        assert.deepEqual(await balances(accounts), {
+          total: "100",
+          deposited: "100",
+          supply: "0",
+          assets: "0",
+          userAssets: "1000000",
+          userShares: "0",
+        });
+      });
     });
   }
 );
