@@ -1,4 +1,4 @@
-# Liquidity Vault — Weeks 8–12
+# Liquidity Vault — Weeks 8–13
 
 Существующий проект Anchor **0.31.1**. Program ID:
 `DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9`.
@@ -617,3 +617,73 @@ Week 12 signatures имеют статус **finalized**, deploy buffer закр
 бинарника с 332880 до 479416 байт; размеры VaultConfig/UserPosition не менялись.
 Реальные активы, mainnet и платные RPC не использовались. Приватные ключи не входят
 в изменения Git; commit/push/merge не выполнялись.
+
+## Week 13 — CLMM-позиция под управлением Vault PDA
+
+Добавлены `open_clmm_position`, `increase_clmm_liquidity`, `collect_clmm_fees`,
+`decrease_clmm_liquidity`, `close_clmm_position`. Все операции требуют admin из
+VaultConfig. Используются официальный закреплённый CPI crate и прежний пул Week 11;
+ручная позиция Week 11 не передаётся Vault и не изменяется.
+
+Новый **ClmmPositionBinding PDA**: `[b"clmm-position", vault.key().as_ref()]`,
+**146 байт** с discriminator. Он связывает Vault, pool, NFT mint, personal position,
+границы ticks и флаг open. VaultConfig=145, UserPosition=81, StrategyConfig=138 байт;
+старые seeds и Program ID не изменены, миграции нет.
+
+Admin оплачивает открытие пустой Raydium-позиции, но NFT сразу получает каноническое
+ATA **Vault PDA**. Последующий increase CPI подписывает Vault и вносит оба токена
+из его ATA. Это другой mint, не ShareMint пользователя. Collect вызывает Raydium
+decrease_liquidity_v2 с liquidity=0: обновлённые trading fees поступают в два ATA
+Vault без уменьшения liquidity. Decrease возвращает principal и причитающиеся
+комиссии туда же. Close требует нулевых liquidity/fees/rewards, сжигает NFT и
+закрывает personal position/NFT ATA. Classic SPL NFT mint остаётся с supply=0.
+Rent закрытых аккаунтов возвращается **Vault PDA**, не администратору.
+
+На время открытой CLMM-позиции mint authority shares принадлежит Position PDA,
+поэтому deposit/withdraw заблокированы. Старый `end_strategy` требует authority
+Strategy PDA и не может снять lock даже при нулевом втором ATA. Вернуть authority
+Strategy PDA может только успешный проверенный close; далее требуются обратный
+swap GUL-B → GUL-A и `end_strategy`. Списки аккаунтов старых инструкций сохранены.
+
+Диапазон ticks **[-600,600]**, шаг 60, примерно **0.941767–1.061833 GUL-B/GUL-A**.
+Используются прежние tick arrays со start=-3600 и 0. Цена, fee growth и количество
+liquidity читаются on-chain. Суммы рассчитываются BN/BigInt, max/min защищены 1%
+допуском; reward campaigns и произвольные remaining accounts не поддерживаются.
+
+Остаются ограничения учебной модели: нет полного NAV, вывод зависит от admin и
+ликвидности Raydium, dust/donations могут задержать cleanup. Неудачный cleanup
+не снимает блокировку. Week 14 frontend и Week 15 demo не реализованы.
+
+Архитектура, полные аккаунты, ABI и команды: [week13/README.md](week13/README.md).
+Публичные адреса, signatures, snapshots, fees и результаты:
+[week13/manifest.devnet.json](week13/manifest.devnet.json).
+
+Проверки прежних недель учитывают новые операции без изменения исходных baseline:
+Week 11 выводит движения кошелька из подтверждённых pre/post token balances;
+Week 12 добавляет к историческим 101 GUL-A только фактический подтверждённый
+deposit Week 13, проверяя инструкцию и зачисление в Vault. Старые тестовые сценарии
+не удаляются и не пропускаются.
+
+### Проверенный результат Week 13
+
+**DONE:** upgrade и 17 транзакций полного цикла — finalized; 18 отрицательных
+сценариев — успешные проверки отклонения в симуляции, без публикации.
+Собрано **0.000599 GUL-A + 0.000595 GUL-B**,
+пользователь после unlock вывел **99.751909 GUL-A**.
+Vault: [8AeUZyL1kxZn3QLcqzL88Ay1i2wjDdui2VyTZHp9Y6fy](https://explorer.solana.com/address/8AeUZyL1kxZn3QLcqzL88Ay1i2wjDdui2VyTZHp9Y6fy?cluster=devnet); новая позиция: [6LqQ71xwdd5sF2Md4u4sAnqfsXWFzaTpaKYGyFmp953W](https://explorer.solana.com/address/6LqQ71xwdd5sF2Md4u4sAnqfsXWFzaTpaKYGyFmp953W?cluster=devnet); NFT: [VSnJYEPhb5CsLpSukaYy9tWbCwd9cEkKfQ4GXEoirhL](https://explorer.solana.com/address/VSnJYEPhb5CsLpSukaYy9tWbCwd9cEkKfQ4GXEoirhL?cluster=devnet).
+Upgrade: [26peZLB215wWv5GeSggGMo95ozfA4GXdXChkxrbdCDFkxmvx4XSePnwd2BR4c7ckMiAeSBx32XbMNg3hAC1EnfGn](https://explorer.solana.com/tx/26peZLB215wWv5GeSggGMo95ozfA4GXdXChkxrbdCDFkxmvx4XSePnwd2BR4c7ckMiAeSBx32XbMNg3hAC1EnfGn?cluster=devnet).
+Collect: [sA7B2dNqb7LGxFw4TiMWgXNzuXJYa5DNHLny2UHMsVNPRzuYDMG7u3aXxUzrswbG8x3Pnvjr6n1qordphEkEFMo](https://explorer.solana.com/tx/sA7B2dNqb7LGxFw4TiMWgXNzuXJYa5DNHLny2UHMsVNPRzuYDMG7u3aXxUzrswbG8x3Pnvjr6n1qordphEkEFMo?cluster=devnet).
+Close: [3ZiQs1QKyaGKUvNAuGVrFTtcMRHkWyFgJDNhAEG4oCHaFFG766d13UDWnNZYefDyjh7EzbfXJnfiHaV3TsUwadh2](https://explorer.solana.com/tx/3ZiQs1QKyaGKUvNAuGVrFTtcMRHkWyFgJDNhAEG4oCHaFFG766d13UDWnNZYefDyjh7EzbfXJnfiHaV3TsUwadh2?cluster=devnet).
+Withdraw: [3fsfKh8Ras2xkfPFywxVX42pSQmVf92eeyDHLPKk3RJ2fwfnARRKnMzKtZRURLoq7X4As31W1Y2VYn5u5VhrgyJj](https://explorer.solana.com/tx/3fsfKh8Ras2xkfPFywxVX42pSQmVf92eeyDHLPKk3RJ2fwfnARRKnMzKtZRURLoq7X4As31W1Y2VYn5u5VhrgyJj?cluster=devnet).
+
+После завершения Vault GUL-A/GUL-B/shares supply=0, NFT supply=0, personal
+position/NFT ATA закрыты, mint authority shares=Vault, strategy.active=false.
+Исторические депозиты=201 GUL-A; размеры 145/81/138 байт и прежние seeds сохранены.
+
+Локальные проверки: fmt/build/typecheck PASS; Rust 13/13, JS Week 11/12/13 —
+4/2/2 PASS. Devnet regression Week 8–10 — 10/10; verify Week 11/12/13 — PASS.
+Rent ProgramData вырос на 1.079235840 SOL; upgrade/upload fees
+0.003620000 SOL; fees цикла 0.000095000 SOL.
+
+[Полная таблица адресов, всех signatures, балансов, rent и RPC-доказательств](week13/README.md#фактический-devnet-результат-week-13).
+[Публичный журнал](week13/manifest.devnet.json) содержит snapshots и результаты симуляций.

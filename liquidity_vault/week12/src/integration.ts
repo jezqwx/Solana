@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { createHash } from "node:crypto";
 import BN from "bn.js";
 import {
   Transaction,
@@ -319,8 +322,9 @@ export async function verify() {
     positionInfo = await c.connection.getAccountInfo(c.position);
   assert.equal(vaultInfo?.data.length, 145);
   assert.equal(positionInfo?.data.length, 81);
-  assert.equal(vaultInfo!.data.readBigUInt64LE(136), BigInt("101000000"));
-  assert.equal(positionInfo!.data.readBigUInt64LE(72), BigInt("101000000"));
+  const historical = BigInt("101000000") + (await confirmedWeek13Deposit());
+  assert.equal(vaultInfo!.data.readBigUInt64LE(136), historical);
+  assert.equal(positionInfo!.data.readBigUInt64LE(72), historical);
   assert.equal(Object.keys(m.negativeTests).length, 17);
   for (const test of Object.values(m.negativeTests) as c.Journal[])
     assert(
@@ -355,4 +359,46 @@ export async function verify() {
   };
   console.log(JSON.stringify(report, null, 2));
   return report;
+}
+async function confirmedWeek13Deposit(): Promise<bigint> {
+  const file = path.join(c.ROOT, "../week13/manifest.devnet.json");
+  if (!fs.existsSync(file)) return 0n;
+  const m = JSON.parse(fs.readFileSync(file, "utf8"));
+  const deposit = m.transactions?.deposit;
+  if (!deposit) return 0n;
+  assert.equal(m.vault, c.vault.toBase58());
+  assert.equal(m.wallet, c.owner.toBase58());
+  const tx = await c.connection.getTransaction(deposit.signature, {
+    commitment: "confirmed",
+    maxSupportedTransactionVersion: 0,
+  });
+  assert(tx?.meta && tx.meta.err === null);
+  const keys = tx.transaction.message.getAccountKeys({
+    accountKeysFromLookups: tx.meta.loadedAddresses,
+  });
+  const discriminator = createHash("sha256")
+    .update("global:deposit")
+    .digest()
+    .subarray(0, 8);
+  const ix = tx.transaction.message.compiledInstructions.filter(
+    (ix) =>
+      keys.get(ix.programIdIndex)?.equals(c.pid) &&
+      Buffer.from(ix.data).subarray(0, 8).equals(discriminator)
+  );
+  assert.equal(ix.length, 1);
+  assert(ix[0].accountKeyIndexes.some((i) => keys.get(i)?.equals(c.vault)));
+  assert(ix[0].accountKeyIndexes.some((i) => keys.get(i)?.equals(c.position)));
+  const amount = Buffer.from(ix[0].data).readBigUInt64LE(8);
+  const pre = tx.meta.preTokenBalances?.find((b) =>
+    keys.get(b.accountIndex)?.equals(c.tokenVault)
+  );
+  const post = tx.meta.postTokenBalances?.find((b) =>
+    keys.get(b.accountIndex)?.equals(c.tokenVault)
+  );
+  assert(pre && post);
+  assert.equal(
+    BigInt(post.uiTokenAmount.amount) - BigInt(pre.uiTokenAmount.amount),
+    amount
+  );
+  return amount;
 }

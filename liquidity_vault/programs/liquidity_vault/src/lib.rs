@@ -1,9 +1,11 @@
 use anchor_lang::prelude::*;
+pub mod clmm_position;
 pub mod strategy;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{self, Burn, Mint, MintTo, Token, TokenAccount, TransferChecked},
 };
+pub use clmm_position::*;
 pub use strategy::*;
 
 declare_id!("DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9");
@@ -11,6 +13,40 @@ declare_id!("DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9");
 #[program]
 pub mod liquidity_vault {
     use super::*;
+
+    pub fn open_clmm_position(
+        ctx: Context<OpenClmmPosition>,
+        lower: i32,
+        upper: i32,
+    ) -> Result<()> {
+        clmm_position::open(ctx, lower, upper)
+    }
+    pub fn increase_clmm_liquidity(
+        ctx: Context<ManageClmmPosition>,
+        liquidity: u128,
+        max_a: u64,
+        max_b: u64,
+    ) -> Result<()> {
+        clmm_position::increase(ctx, liquidity, max_a, max_b)
+    }
+    pub fn collect_clmm_fees(
+        ctx: Context<ManageClmmPosition>,
+        min_a: u64,
+        min_b: u64,
+    ) -> Result<()> {
+        clmm_position::decrease(ctx, 0, min_a, min_b, true)
+    }
+    pub fn decrease_clmm_liquidity(
+        ctx: Context<ManageClmmPosition>,
+        liquidity: u128,
+        min_a: u64,
+        min_b: u64,
+    ) -> Result<()> {
+        clmm_position::decrease(ctx, liquidity, min_a, min_b, false)
+    }
+    pub fn close_clmm_position(ctx: Context<ManageClmmPosition>) -> Result<()> {
+        clmm_position::close(ctx)
+    }
 
     pub fn initialize_strategy(ctx: Context<InitializeStrategy>) -> Result<()> {
         strategy::initialize(ctx)
@@ -462,6 +498,20 @@ pub enum VaultError {
     StrategyNotSettled,
     #[msg("Swap must spend the requested input and receive at least minimum output.")]
     InvalidSwapResult,
+    #[msg("Invalid CLMM ticks, range or spacing.")]
+    InvalidClmmTicks,
+    #[msg("Invalid CLMM position, NFT or account binding.")]
+    InvalidClmmPosition,
+    #[msg("The Vault already controls an open CLMM position.")]
+    ClmmPositionAlreadyOpen,
+    #[msg("The CLMM position is closed.")]
+    ClmmPositionClosed,
+    #[msg("Invalid CLMM liquidity or token amount limits.")]
+    InvalidClmmLiquidity,
+    #[msg("Withdraw liquidity and collect all fees before closing.")]
+    ClmmPositionNotEmpty,
+    #[msg("Reward campaigns require additional validated accounts and are unsupported.")]
+    UnsupportedClmmRewards,
 }
 
 #[cfg(test)]

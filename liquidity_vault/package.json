@@ -1,7 +1,7 @@
 {
   "license": "ISC",
   "scripts": {
-    "typecheck": "tsc --noEmit && yarn --cwd week11 typecheck && yarn --cwd week12 typecheck",
+    "typecheck": "tsc --noEmit && yarn --cwd week11 typecheck && yarn --cwd week12 typecheck && yarn --cwd week13 typecheck",
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
   },

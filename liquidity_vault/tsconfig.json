@@ -7,5 +7,5 @@
     "target": "es6",
     "esModuleInterop": true
   },
-  "exclude": ["node_modules", "week11", "week12"]
+  "exclude": ["node_modules", "week11", "week12", "week13"]
 }
