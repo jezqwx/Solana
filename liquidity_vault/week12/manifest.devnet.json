@@ -1,0 +1,1488 @@
+{
+  "schema": 1,
+  "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "programId": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+  "poolId": "gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf",
+  "wallet": "bnCwyNq3mqquCp3bQksZnrMk7t4wR8iw2NU2x21pjDe",
+  "assetMint": "6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy",
+  "quoteMint": "GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1",
+  "vault": "8AeUZyL1kxZn3QLcqzL88Ay1i2wjDdui2VyTZHp9Y6fy",
+  "shareMint": "CkVn7x4QyabzXqREhevUT8ekVvmTJjYuorYrbfBYAsRC",
+  "tokenVault": "Gi9DMbq37o7bU8ecvh3uHSwy1D8pxBcb9hLgYsg6hrdf",
+  "quoteVault": "GabSU6QBJoTFzEqNPBpQFkgvqRCfkLsyAKonNSnouUbm",
+  "strategy": "3w3pR8guWs2SStpwf2bvkwoFyrNJjdiUSujsC5Jmp8TF",
+  "position": "DnJ2wGoKdYKmocvy2viMMTDN2pxzunRi61fmtEGTvCaX",
+  "startBalanceLamports": 5535518320,
+  "transactions": {
+    "initialize-vault": {
+      "signature": "CvwxZscMHfNRUTn1seoMbLKqFAdmyaEMYv4WPmCcvnWorf7Mvo1NHLXejC1Khi2NZ1nFgKqt9J5qZyzRajfvnee",
+      "blockhash": "AAhJcQDXr94oeGvJLe5YrSEu4KACcaZkbQHPsXAfwx4a",
+      "lastValidBlockHeight": 501913780,
+      "status": "confirmed",
+      "before": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "1052e2d87e896b724d105312bd9a0b0c66e4b7f70753111d83916eb84d320a37",
+          "lamports": 1488440
+        },
+        null,
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "520bd264a5f83e6f70a418d88e2d94f971353138cbad95199a0ad67f939d3505",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "369dbe650831265cfb5a324150b585e9d8d1f77d26baa0a407d2a813f96a1455",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "f6deed475705d0e353945443c1dd841590c9175cd38ee53c0a82a54d03553730",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "open-position": {
+      "signature": "5jaCoYAdfKqHLKaiVcYFe7FVpsvne3hPD4tcPfrqcFR6QHmfeLdgMtLxJbTmfn8CUfGw2SVfZ1q5SreppDEsWztp",
+      "blockhash": "2peYeMS5ovtZUgqFRdys2zGYEL85waJqYVSm41DokV65",
+      "lastValidBlockHeight": 501913787,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "c4eb6cdebcf60e227c4f4f115273678536c5ca2e03e67faf53c83d2af0131cef",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "ed26ed48a45eac9d541e33f2bb79eca18059611cc3c42f7f1ac98aa106cc8d81",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "d27c28f12ed27497ce4abebd5db76bdec96a030462092a521a91b2d3de66561d",
+          "lamports": 1488440
+        },
+        null,
+        null,
+        null,
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "1052e2d87e896b724d105312bd9a0b0c66e4b7f70753111d83916eb84d320a37",
+          "lamports": 1488440
+        },
+        null,
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "520bd264a5f83e6f70a418d88e2d94f971353138cbad95199a0ad67f939d3505",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "369dbe650831265cfb5a324150b585e9d8d1f77d26baa0a407d2a813f96a1455",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "f6deed475705d0e353945443c1dd841590c9175cd38ee53c0a82a54d03553730",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "initialize-strategy": {
+      "signature": "3PoUmJxAkqrBi6ULbdUXER7788kdspJXyTHMog6BGwuZzonPAXqAzHgctgMPNSAgYy67oHC6bBeRkLNpnV29d7c1",
+      "blockhash": "FnLTWBdAuom3rFNKWJwF5RDSL5fJCJXg8Nv9pwwUBqkU",
+      "lastValidBlockHeight": 501913794,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "c4eb6cdebcf60e227c4f4f115273678536c5ca2e03e67faf53c83d2af0131cef",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "ed26ed48a45eac9d541e33f2bb79eca18059611cc3c42f7f1ac98aa106cc8d81",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "d27c28f12ed27497ce4abebd5db76bdec96a030462092a521a91b2d3de66561d",
+          "lamports": 1488440
+        },
+        null,
+        null,
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "55d0a4ba52035144d346793baa970a584e08107136d8f5e8692c5b90d61189f8",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "1052e2d87e896b724d105312bd9a0b0c66e4b7f70753111d83916eb84d320a37",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "4cb5ad39e511dc57aa493609649d9a06dae558543a7a6916dd9a533c53d93cea",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "520bd264a5f83e6f70a418d88e2d94f971353138cbad95199a0ad67f939d3505",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "369dbe650831265cfb5a324150b585e9d8d1f77d26baa0a407d2a813f96a1455",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "f6deed475705d0e353945443c1dd841590c9175cd38ee53c0a82a54d03553730",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "deposit": {
+      "signature": "29cZMYEsuZ8QEdaraaB4r22WP1fNSYukN2yemKE4Jj6ZvASYVC2NbFU18jNq4EMgJWUEEhL7ZCFft2cuBwaxsN4B",
+      "blockhash": "Z5LzcndmHxS9SatpBTQQdX4Mg4jykDTFGbPEu38jLdL",
+      "lastValidBlockHeight": 501913842,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "c4eb6cdebcf60e227c4f4f115273678536c5ca2e03e67faf53c83d2af0131cef",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "ed26ed48a45eac9d541e33f2bb79eca18059611cc3c42f7f1ac98aa106cc8d81",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "d27c28f12ed27497ce4abebd5db76bdec96a030462092a521a91b2d3de66561d",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a1d81fc31703d52bf7b64b655f220bee852a7a9e1cbcd2ac15e09e517d3b2de2",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "2c594f9eabfca44f5ef231115637e702e1825bb5443efe1827bf9af0721d0db7",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "55d0a4ba52035144d346793baa970a584e08107136d8f5e8692c5b90d61189f8",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "1052e2d87e896b724d105312bd9a0b0c66e4b7f70753111d83916eb84d320a37",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "4cb5ad39e511dc57aa493609649d9a06dae558543a7a6916dd9a533c53d93cea",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "520bd264a5f83e6f70a418d88e2d94f971353138cbad95199a0ad67f939d3505",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "369dbe650831265cfb5a324150b585e9d8d1f77d26baa0a407d2a813f96a1455",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "f6deed475705d0e353945443c1dd841590c9175cd38ee53c0a82a54d03553730",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "forward": {
+      "signature": "5d1KC2VjD9t6287WCDCrkbDAD75djLn5sfSpVSKBiDGP5xzqWCUnmM2zhU54tkR1gM4TDBNzW7KBh9tEqwft571W",
+      "blockhash": "Cj2Ys9tx9AEgCr9KPnEfQXb3oYM7VytNRZtppuq5VQRt",
+      "lastValidBlockHeight": 501915166,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "03ae60aa0e53b630421ebd9c3a1b4f656ceb166e9599c4eee35804b27fe401f2",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "ca9909e3811b88fabc4a3d28d7f955a78978034a3cd074b2cde952ee56aee6a9",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "4ef4d17abc0b9c125c5ff931940172cd64c9814b066afb127f57e8a5ca741b55",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a1d81fc31703d52bf7b64b655f220bee852a7a9e1cbcd2ac15e09e517d3b2de2",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "2c594f9eabfca44f5ef231115637e702e1825bb5443efe1827bf9af0721d0db7",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "7b3b369171e24eb06d2dbdff0b3a7441b091e2a15c210174b336715b30166169",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "9c06e4d573ddb0dc7831a3f9712fd6a971e4cb1720b07b1775fcfe5de956d9b8",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "82bac797feb9e870c72814dbe3353312375b8fa0d9919aecbfbd1e40777787a4",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "520bd264a5f83e6f70a418d88e2d94f971353138cbad95199a0ad67f939d3505",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "369dbe650831265cfb5a324150b585e9d8d1f77d26baa0a407d2a813f96a1455",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "f6deed475705d0e353945443c1dd841590c9175cd38ee53c0a82a54d03553730",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "reinitialize-strategy": {
+      "signature": "5C3qMt6U3yEaA7W11o7JbooaUAUAyxXsPmH6yQ4wMzrzrkcunttFSxxjL23Lah6Rxd43XDdWTQDjCtDMQBULLLBF",
+      "blockhash": "ux8XQFSc5wEdGWULLQrAnvQsxrEm64YEnqM56Ud16Kg",
+      "lastValidBlockHeight": 501915324,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "03ae60aa0e53b630421ebd9c3a1b4f656ceb166e9599c4eee35804b27fe401f2",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "431a3cda3e5ad16f022127c33aecae1f561101862f5bdf554916870c18c983cf",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a04e91fc0a90bdcce9667e9c16dd718c5d6a131377020669a3602d5d959842f0",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "0dfd472c674bc9e07e28332c507b080e39737fe109fb30c0a18f863fc023efaf",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "d3aa345898b8953d00d06cc6f55a4e1deb84a428af8b2db4b06c3325bc5402f2",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "7b3b369171e24eb06d2dbdff0b3a7441b091e2a15c210174b336715b30166169",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "9c06e4d573ddb0dc7831a3f9712fd6a971e4cb1720b07b1775fcfe5de956d9b8",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "82bac797feb9e870c72814dbe3353312375b8fa0d9919aecbfbd1e40777787a4",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2e72677409547307e874e3192fcdf7f4893bd590be28eb341e27f38094dbde4c",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "2851dfc8e4dea75e664111f1b6e9270aa08803276dd8c2c1b9144c14011e67a6",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "29d19be26f1b4276524b87319c40d36ea1b4cf6157bd2fe618746e4d892dcac7",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "7308aa3f1e65cacdfc57c94766c55c8abd41bc2c1c8fabd0edd81e7dc900ea6a",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "reverse": {
+      "signature": "3jHW6Z6JQ4d3QfBZoqRSJFZoU6WnUdynjZDS5bVaZU4so58LuKT4nZub41oRGFG1EFDTJxgZfQLRjE5VApJmpDFr",
+      "blockhash": "7fjAPUzEfrJwp5e7tdhEt5UpTEiLTMmJW3b5TWfP4wCP",
+      "lastValidBlockHeight": 501915504,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "03ae60aa0e53b630421ebd9c3a1b4f656ceb166e9599c4eee35804b27fe401f2",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "431a3cda3e5ad16f022127c33aecae1f561101862f5bdf554916870c18c983cf",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a04e91fc0a90bdcce9667e9c16dd718c5d6a131377020669a3602d5d959842f0",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "0dfd472c674bc9e07e28332c507b080e39737fe109fb30c0a18f863fc023efaf",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "d3aa345898b8953d00d06cc6f55a4e1deb84a428af8b2db4b06c3325bc5402f2",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "7b3b369171e24eb06d2dbdff0b3a7441b091e2a15c210174b336715b30166169",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "9c06e4d573ddb0dc7831a3f9712fd6a971e4cb1720b07b1775fcfe5de956d9b8",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "82bac797feb9e870c72814dbe3353312375b8fa0d9919aecbfbd1e40777787a4",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2e72677409547307e874e3192fcdf7f4893bd590be28eb341e27f38094dbde4c",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "2851dfc8e4dea75e664111f1b6e9270aa08803276dd8c2c1b9144c14011e67a6",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "29d19be26f1b4276524b87319c40d36ea1b4cf6157bd2fe618746e4d892dcac7",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "7308aa3f1e65cacdfc57c94766c55c8abd41bc2c1c8fabd0edd81e7dc900ea6a",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "end-strategy": {
+      "signature": "35WsH47pFQx1uV5zxiYkVc8LfbUqkRZ5R4pUSJkyJUZQfLSjNSk4FMGcaazdi66ND3kT6JDH63K4c2uiZET8j5cB",
+      "blockhash": "9vTd1m22Fu6mgirawZVeEpC7wTshbZz4hAQPp9GTmKUH",
+      "lastValidBlockHeight": 501915571,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "03ae60aa0e53b630421ebd9c3a1b4f656ceb166e9599c4eee35804b27fe401f2",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "431a3cda3e5ad16f022127c33aecae1f561101862f5bdf554916870c18c983cf",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "aa05020db913be675700fd9e50ac02075b624a6563f8b2712fb899821b67e14a",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a1d81fc31703d52bf7b64b655f220bee852a7a9e1cbcd2ac15e09e517d3b2de2",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "d3aa345898b8953d00d06cc6f55a4e1deb84a428af8b2db4b06c3325bc5402f2",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "7b3b369171e24eb06d2dbdff0b3a7441b091e2a15c210174b336715b30166169",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "9c06e4d573ddb0dc7831a3f9712fd6a971e4cb1720b07b1775fcfe5de956d9b8",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "82bac797feb9e870c72814dbe3353312375b8fa0d9919aecbfbd1e40777787a4",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "4b613b199f8d4bddaf095d96b25af04e68f9cf6cc1baba392e86e8a501175a17",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "04ff9ee34cc3684fd5ec4696916a2ab8952a65c3f14c17958bf494255c0fc4e6",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "7308aa3f1e65cacdfc57c94766c55c8abd41bc2c1c8fabd0edd81e7dc900ea6a",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "deposit-after-unlock": {
+      "signature": "43qM6sYV6pEApd9szAYDUiDUgNVDwVXE7fmrc2Y2PCNDz2xVNppapaQ7FREdmXx3CLTvhc3iJ3tnnbSAvDiPaB5L",
+      "blockhash": "8tfGGVTTgR7m3GfAxrtUYLY4P21RkWY6dVkWQtEJa9e3",
+      "lastValidBlockHeight": 501915638,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "03ae60aa0e53b630421ebd9c3a1b4f656ceb166e9599c4eee35804b27fe401f2",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "ca9909e3811b88fabc4a3d28d7f955a78978034a3cd074b2cde952ee56aee6a9",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "aa05020db913be675700fd9e50ac02075b624a6563f8b2712fb899821b67e14a",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a1d81fc31703d52bf7b64b655f220bee852a7a9e1cbcd2ac15e09e517d3b2de2",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "2c594f9eabfca44f5ef231115637e702e1825bb5443efe1827bf9af0721d0db7",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "7b3b369171e24eb06d2dbdff0b3a7441b091e2a15c210174b336715b30166169",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "9c06e4d573ddb0dc7831a3f9712fd6a971e4cb1720b07b1775fcfe5de956d9b8",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "82bac797feb9e870c72814dbe3353312375b8fa0d9919aecbfbd1e40777787a4",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "4b613b199f8d4bddaf095d96b25af04e68f9cf6cc1baba392e86e8a501175a17",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "04ff9ee34cc3684fd5ec4696916a2ab8952a65c3f14c17958bf494255c0fc4e6",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "7308aa3f1e65cacdfc57c94766c55c8abd41bc2c1c8fabd0edd81e7dc900ea6a",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    },
+    "withdraw-after-unlock": {
+      "signature": "XAkWhWULUc6nJn4ePYqzT5BdXARVMa4yFmoJkufzwYFJUyza9i1c1reEPb16KfCPSWJccbezFm1ZkSAyNAkphGa",
+      "blockhash": "2MsubdB8VQZaJFQ6gZrcTYbQSQ66GXaSQnS4iajB43YK",
+      "lastValidBlockHeight": 501915690,
+      "status": "confirmed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "4274704229b1527fbf7917c474efd761a21a9c701fe1924c2b62d2ce4f742939",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "2b4f54688c0bdf252606d64f5c7035ed366c7ef6add7cbec722c6e69afd38393",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "3b24a2e19890b132ee4e73ade3d22d91a5463dee44643b01c524e7c6e9e4678c",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a1d81fc31703d52bf7b64b655f220bee852a7a9e1cbcd2ac15e09e517d3b2de2",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "2c594f9eabfca44f5ef231115637e702e1825bb5443efe1827bf9af0721d0db7",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "5947a0a15e46aa87a6f6b6ae92906efeb76451e55d0b89f8e7f5fc7e1773d9f4",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "0224b68a1015ebb7de148bf6d9c7113b9a5de1015bff3fdca51795df24438107",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "2599555faad9d12a8b8384701dadcf99a82c4ca9820809e1c818bb5c3d9c5236",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "4b613b199f8d4bddaf095d96b25af04e68f9cf6cc1baba392e86e8a501175a17",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "04ff9ee34cc3684fd5ec4696916a2ab8952a65c3f14c17958bf494255c0fc4e6",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "7308aa3f1e65cacdfc57c94766c55c8abd41bc2c1c8fabd0edd81e7dc900ea6a",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ]
+    }
+  },
+  "negativeTests": {
+    "admin-only": {
+      "status": "passed",
+      "signature": "32Ye7oNf2EEcwaGjbTkjKqNWruJiuNugi8wyhdviDPSgmawjtjzmM3ZB3MorMvZ68PDvBJU5tuqzYguJKA7GdECY",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6018
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: vault. Error Code: UnauthorizedAdmin. Error Number: 6018. Error Message: Only the vault administrator may manage the strategy..",
+        "Program log: Left:",
+        "Program log: bnCwyNq3mqquCp3bQksZnrMk7t4wR8iw2NU2x21pjDe",
+        "Program log: Right:",
+        "Program log: GCbxjk6QXdWeaXPHLiqZbdRrB323kdmuTKyZAJeDFGTL",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 13293 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1782"
+      ],
+      "unchanged": true
+    },
+    "wrong-pool": {
+      "status": "passed",
+      "signature": "539eHHUkxVUhmqB3w2GCk8eKQLEXPuoU88SV1CHnJ9nPFJ1W7w1sELo39LuAYFT47y4Xracf3qpVrRFLL3axaUJi",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 3002
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: pool. Error Code: AccountDiscriminatorMismatch. Error Number: 3002. Error Message: Account discriminator did not match what was expected.",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 9739 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0xbba"
+      ],
+      "unchanged": true
+    },
+    "wrong-mint": {
+      "status": "passed",
+      "signature": "4MB5ZxFTyXdt7epk74w758wQBTxRuf3SoFqtTz537wxZAiy2JfPF129YhUosdpVngJ5y1VSzRVDemT9jLzRmybur",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 2001
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: strategy. Error Code: ConstraintHasOne. Error Number: 2001. Error Message: A has one constraint was violated.",
+        "Program log: Left:",
+        "Program log: GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1",
+        "Program log: Right:",
+        "Program log: 6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 14961 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x7d1"
+      ],
+      "unchanged": true
+    },
+    "wrong-source": {
+      "status": "passed",
+      "signature": "HQE59b9dA17ZcmX3YryrfNjxaDWHSoFtKwZW6nyDN6GfBZDYuZKDNuz71m7veyP1iqkTudjBD11opo7WZSbKqUL",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 2001
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: vault. Error Code: ConstraintHasOne. Error Number: 2001. Error Message: A has one constraint was violated.",
+        "Program log: Left:",
+        "Program log: Gi9DMbq37o7bU8ecvh3uHSwy1D8pxBcb9hLgYsg6hrdf",
+        "Program log: Right:",
+        "Program log: 9DJYtYoDgCQHtDRomRNhSHyAy727m16pXRXPERfX6JjL",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 13428 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x7d1"
+      ],
+      "unchanged": true
+    },
+    "foreign-destination": {
+      "status": "passed",
+      "signature": "1QgKW5PNAdJ9vNvmh3DSVo8MMzaqMo2uPo1wt3vvg8G1abxfmSaf2G5QbNvvhvt5pPoNJJJgZRJo9VTjhgGHezS",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 2001
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: strategy. Error Code: ConstraintHasOne. Error Number: 2001. Error Message: A has one constraint was violated.",
+        "Program log: Left:",
+        "Program log: GabSU6QBJoTFzEqNPBpQFkgvqRCfkLsyAKonNSnouUbm",
+        "Program log: Right:",
+        "Program log: 9mEtVt5UsXuYjUSTRPjNSvS4S3APZoKt7aq9VwamCNgR",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 15188 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x7d1"
+      ],
+      "unchanged": true
+    },
+    "fake-cpi-target": {
+      "status": "passed",
+      "signature": "5PwZ8Pf6jxU39HKf1Ze6dX7xwRCmSZZLVPfrow8SBHsjL9zh41DVijfx2fMRmNduc4zp22e9zJmfLUa2LtJ4sMFp",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 3008
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: raydium_program. Error Code: InvalidProgramId. Error Number: 3008. Error Message: Program ID was not as expected.",
+        "Program log: Left:",
+        "Program log: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "Program log: Right:",
+        "Program log: DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 11367 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0xbc0"
+      ],
+      "unchanged": true
+    },
+    "wrong-pool-vault": {
+      "status": "passed",
+      "signature": "2oEBdRGYrvZn7woj4b53VfFdeyGaDj6WrRS4PyLww3hfDBVxzi635evDho8BUe78kwfnz4MLyjA8xW6M2t1j4sam",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 2012
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: pool_vault_a. Error Code: ConstraintAddress. Error Number: 2012. Error Message: An address constraint was violated.",
+        "Program log: Left:",
+        "Program log: HVpYLZewY65hhhPSPR1koHmERQfXoCqkfudKwtgjiBSo",
+        "Program log: Right:",
+        "Program log: Bu3sjqQQRBurbdRJ85EV6s9odkQfPnAsGYXiBo9kp222",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 29163 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x7dc"
+      ],
+      "unchanged": true
+    },
+    "wrong-observation": {
+      "status": "passed",
+      "signature": "4vdtf917SwUYrw5FaPotHjpqEs5pefZKB8UoebbTq49HXY6f9aKZ2LvZBQ13o9gH8wfSCad7PycYSZJZ8hj5gSLc",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 2012
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError caused by account: observation. Error Code: ConstraintAddress. Error Number: 2012. Error Message: An address constraint was violated.",
+        "Program log: Left:",
+        "Program log: gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf",
+        "Program log: Right:",
+        "Program log: EgrpcnywpsvEiRAZNQsKPKx7Z6s27fyLVwGpPDqCaHbM",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 29432 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x7dc"
+      ],
+      "unchanged": true
+    },
+    "zero-input": {
+      "status": "passed",
+      "signature": "2upQbdN5PhZUqTgy4RvzVznq4K7sEBRVSTupocjAfPkYiD2RD7eKNSf7tdsUMucKqRNfvpuBPUhGimyCZi61KgwR",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6020
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError thrown in programs/liquidity_vault/src/strategy.rs:221. Error Code: InvalidSwapAmount. Error Number: 6020. Error Message: Swap amount and minimum output must both be positive..",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 29453 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1784"
+      ],
+      "unchanged": true
+    },
+    "zero-minimum": {
+      "status": "passed",
+      "signature": "4CW7DqhW7s9txzQJNhEsXTiPG4DWKhR5VZu19SvJuDLjmLP8gdMBY5W7wUsH6FiQF6sTfL2yLZTfCqoHr2SD5kYw",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6020
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError thrown in programs/liquidity_vault/src/strategy.rs:221. Error Code: InvalidSwapAmount. Error Number: 6020. Error Message: Swap amount and minimum output must both be positive..",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 29454 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1784"
+      ],
+      "unchanged": true
+    },
+    "wrong-tick-array": {
+      "status": "passed",
+      "signature": "3oHxQXT2vQvhoPHYmc5antwgAGZjzpxqbv5onPTH1x1PFefiQBijQdNZAcfPb4GcXD3cJsz2M6MWmmneBqnzxk43",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6021
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError thrown in programs/liquidity_vault/src/strategy.rs:164. Error Code: InvalidRaydiumAccount. Error Number: 6021. Error Message: Invalid Raydium tick array, bitmap or observation account..",
+        "Program log: Left:",
+        "Program log: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "Program log: Right:",
+        "Program log: DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 29407 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1785"
+      ],
+      "unchanged": true
+    },
+    "insufficient-input": {
+      "status": "passed",
+      "signature": "LGTxMgiSUJccmvoLXp9aSjSGgYobxFRkgkLuRS79SLFxArXaHGJcDuLYNHhrHDDHovLHxA3WbCFamTVh3qHUFdt",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6007
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program log: AnchorError thrown in programs/liquidity_vault/src/strategy.rs:238. Error Code: InsufficientAssetBalance. Error Number: 6007. Error Message: User asset account has insufficient tokens for this deposit..",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 42361 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1777"
+      ],
+      "unchanged": true
+    },
+    "initial-slippage-lock-rollback": {
+      "status": "passed",
+      "signature": "4uAGxAsLYaDdt9jFjczuSXLBbHbJ229oSzzjpK2KgYH5hRh9Lv9suaTCgVCnc1TJUdAjX3ni1YzsWq2uFHScEaM4",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6018
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 125 of 608243 compute units",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+        "Program DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH invoke [2]",
+        "Program log: Instruction: SwapV2",
+        "Program data: QMbN6CYIceIKKZ61ckc4JLICjC3+j3jZAx9iL8bK6+oHPH5oAtDGEGp6aMQzH1i+c2d7NYvjO2d534hsPNPhayCnVvyAK7xA6WlnT6X7fOmr1t9frqnXbaHXcbmoaaBMU1IxP6GywiLnemk3CcQ5M95lSq9hNeFhTYx+UVDGswEOaXyLFCiijEBCDwAAAAAAAAAAAAAAAABNOA8AAAAAAAAAAAAAAAAAARoJHo7B7/z/AAAAAAAAAADlwd33BAAAAAAAAAAAAAAA/////8QJAAAAAAAAAAAAAAAAAAA=",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [3]",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 105 of 556895 compute units",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [3]",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 105 of 554523 compute units",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+        "Program log: AnchorError thrown in programs/amm/src/instructions/swap_v2.rs:364. Error Code: TooLittleOutputReceived. Error Number: 6018. Error Message: Too little output received.",
+        "Program log: Left: 997453",
+        "Program log: Right: 9974530",
+        "Program DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH consumed 50663 of 600415 compute units",
+        "Program DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH failed: custom program error: 0x1782",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 100248 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1782"
+      ],
+      "unchanged": true
+    },
+    "deposit-locked": {
+      "status": "passed",
+      "signature": "4PiaQfCe5YZgsVq5ackMfnXwjo7FV2YyFzxTzKZg7mWd3w5RFzj4F8mqT2unAZWskPLRRddxJRfEqqX1HktUYttc",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6017
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Deposit",
+        "Program log: AnchorError caused by account: share_mint. Error Code: StrategyActive. Error Number: 6017. Error Message: Deposits and withdrawals are locked while strategy controls share mint authority..",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 13345 of 200000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1781"
+      ],
+      "unchanged": true
+    },
+    "withdraw-locked": {
+      "status": "passed",
+      "signature": "3K98R4oAS9E9cNE2uwTJBeqpNogrSSTdC7XNJrPTJxWrBiC2JsKNGwFQL4JByLTJGCQfViYq5QPdUMjWuZWCFqrn",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6017
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Withdraw",
+        "Program log: AnchorError caused by account: share_mint. Error Code: StrategyActive. Error Number: 6017. Error Message: Deposits and withdrawals are locked while strategy controls share mint authority..",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 13345 of 200000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1781"
+      ],
+      "unchanged": true
+    },
+    "cannot-unlock-with-quote": {
+      "status": "passed",
+      "signature": "26dufAaEYKVA4xpCnLQp9mYmVKQa1ssgaWuquu5Z7t1LdP2qcSUBjPT25XoQKgVKKgug7SAiWYyb5ShhJqtHywi6",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6023
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: EndStrategy",
+        "Program log: AnchorError thrown in programs/liquidity_vault/src/strategy.rs:372. Error Code: StrategyNotSettled. Error Number: 6023. Error Message: Second token vault must be empty before restoring ordinary mode..",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 24335 of 200000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1787"
+      ],
+      "unchanged": true
+    },
+    "slippage": {
+      "status": "passed",
+      "signature": "3qaoZHxXp2vDxtMcxqeot6bewwwPejcY5589cLu3BKDUZY9pXppTSf5aT8Ms5PFH5fmiSTWP3SPzTNHYTyRp7Xc6",
+      "published": false,
+      "stage": "preflight simulation",
+      "error": {
+        "InstructionError": [
+          0,
+          {
+            "Custom": 6018
+          }
+        ]
+      },
+      "logs": [
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 invoke [1]",
+        "Program log: Instruction: Swap",
+        "Program DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH invoke [2]",
+        "Program log: Instruction: SwapV2",
+        "Program data: QMbN6CYIceIKKZ61ckc4JLICjC3+j3jZAx9iL8bK6+oHPH5oAtDGEGp6aMQzH1i+c2d7NYvjO2d534hsPNPhayCnVvyAK7xA6WlnT6X7fOmr1t9frqnXbaHXcbmoaaBMU1IxP6GywiLnemk3CcQ5M95lSq9hNeFhTYx+UVDGswEOaXyLFCiijEBCDwAAAAAAAAAAAAAAAADwNw8AAAAAAAAAAAAAAAAAAZCk/+CV3/n/AAAAAAAAAADlwd33BAAAAAAAAAAAAAAA/v///8QJAAAAAAAAAAAAAAAAAAA=",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [3]",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 105 of 560932 compute units",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [3]",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 105 of 558560 compute units",
+        "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+        "Program log: AnchorError thrown in programs/amm/src/instructions/swap_v2.rs:364. Error Code: TooLittleOutputReceived. Error Number: 6018. Error Message: Too little output received.",
+        "Program log: Left: 997360",
+        "Program log: Right: 9973600",
+        "Program DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH consumed 48656 of 602445 compute units",
+        "Program DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH failed: custom program error: 0x1782",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 consumed 96211 of 650000 compute units",
+        "Program DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9 failed: custom program error: 0x1782"
+      ],
+      "unchanged": true
+    }
+  },
+  "deployment": {
+    "status": "confirmed",
+    "buffer": "D97vdD5Atn6cmQ73D6yYYjcLozjom5atjMMueHH5Zyzs",
+    "binarySha256": "1ea9a16fb4bfbc3407c857cb136fab44a2d4ef903dbd043b92b7090ee62b0ec2",
+    "binaryBytes": 479416,
+    "previousProgramBytes": 332880,
+    "previousDeploySlot": 514677686,
+    "maxSignAttempts": 1,
+    "signature": "jxBVzwBnyuywqY791Nnbne2zswjmcNJ5RyPwLWqybG6miuGc2Yxzf927Nhy6TZKkrVJwawd4iopEs5wZdmrJpmw",
+    "verifiedProgram": {
+      "programId": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+      "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+      "programdataAddress": "CkNP8uvoiCwCW6TRDvssv4HhVi9kmXgqqe1ioJz7w7pt",
+      "authority": "bnCwyNq3mqquCp3bQksZnrMk7t4wR8iw2NU2x21pjDe",
+      "lastDeploySlot": 514710996,
+      "dataLen": 479416,
+      "lamports": 2436312120
+    },
+    "deployedBinaryMatches": true
+  },
+  "forwardQuote": {
+    "input": "1000000",
+    "expected": "997453",
+    "minimum": "987478",
+    "slippageBps": 100,
+    "before": {
+      "assets": "100000000",
+      "quote": "0",
+      "supply": "100000000",
+      "shareAuthority": "8AeUZyL1kxZn3QLcqzL88Ay1i2wjDdui2VyTZHp9Y6fy",
+      "sqrtPriceX64": "18446744073709551616",
+      "price": "1",
+      "tick": 0
+    }
+  },
+  "expiredAttempts": [
+    {
+      "signature": "5uhPcbM9gVwQMe9UgcWXi3RJuiMBskmmPX2Askac5qgnhQrtmUvA7ea5njCZcJ8XmeRi2w2emGDFgHhMmcwgHmBd",
+      "blockhash": "71LmKprZsMUHLj2TsHfmS2Xw1Bsqrhpgo7uQ15EWRMAC",
+      "lastValidBlockHeight": 501913966,
+      "status": "expired-not-executed",
+      "before": [
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "03ae60aa0e53b630421ebd9c3a1b4f656ceb166e9599c4eee35804b27fe401f2",
+          "lamports": 1386840
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "ca9909e3811b88fabc4a3d28d7f955a78978034a3cd074b2cde952ee56aee6a9",
+          "lamports": 1066800
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "4ef4d17abc0b9c125c5ff931940172cd64c9814b066afb127f57e8a5ca741b55",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "a1d81fc31703d52bf7b64b655f220bee852a7a9e1cbcd2ac15e09e517d3b2de2",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "2c594f9eabfca44f5ef231115637e702e1825bb5443efe1827bf9af0721d0db7",
+          "lamports": 1351280
+        },
+        {
+          "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+          "data": "7b3b369171e24eb06d2dbdff0b3a7441b091e2a15c210174b336715b30166169",
+          "lamports": 1061720
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "9c06e4d573ddb0dc7831a3f9712fd6a971e4cb1720b07b1775fcfe5de956d9b8",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "82bac797feb9e870c72814dbe3353312375b8fa0d9919aecbfbd1e40777787a4",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "520bd264a5f83e6f70a418d88e2d94f971353138cbad95199a0ad67f939d3505",
+          "lamports": 8493760
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "369dbe650831265cfb5a324150b585e9d8d1f77d26baa0a407d2a813f96a1455",
+          "lamports": 1488440
+        },
+        {
+          "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+          "lamports": 1488440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "f6deed475705d0e353945443c1dd841590c9175cd38ee53c0a82a54d03553730",
+          "lamports": 23423880
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+          "lamports": 52669440
+        },
+        {
+          "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+          "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+          "lamports": 52669440
+        }
+      ],
+      "label": "forward",
+      "audit": {
+        "time": "2026-10-24T19:22:57.667Z",
+        "signature": "5uhPcbM9gVwQMe9UgcWXi3RJuiMBskmmPX2Askac5qgnhQrtmUvA7ea5njCZcJ8XmeRi2w2emGDFgHhMmcwgHmBd",
+        "height": 501914204,
+        "lastValidBlockHeight": 501913966,
+        "status": null,
+        "transaction": null,
+        "state": {
+          "assets": "100000000",
+          "quote": "0",
+          "supply": "100000000",
+          "shareAuthority": "8AeUZyL1kxZn3QLcqzL88Ay1i2wjDdui2VyTZHp9Y6fy",
+          "sqrtPriceX64": "18446744073709551616",
+          "price": "1",
+          "tick": 0
+        },
+        "snapshot": [
+          {
+            "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+            "data": "03ae60aa0e53b630421ebd9c3a1b4f656ceb166e9599c4eee35804b27fe401f2",
+            "lamports": 1386840
+          },
+          {
+            "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            "data": "ca9909e3811b88fabc4a3d28d7f955a78978034a3cd074b2cde952ee56aee6a9",
+            "lamports": 1066800
+          },
+          {
+            "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            "data": "4ef4d17abc0b9c125c5ff931940172cd64c9814b066afb127f57e8a5ca741b55",
+            "lamports": 1488440
+          },
+          {
+            "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            "data": "a1d81fc31703d52bf7b64b655f220bee852a7a9e1cbcd2ac15e09e517d3b2de2",
+            "lamports": 1488440
+          },
+          {
+            "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+            "data": "2c594f9eabfca44f5ef231115637e702e1825bb5443efe1827bf9af0721d0db7",
+            "lamports": 1351280
+          },
+          {
+            "owner": "DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9",
+            "data": "7b3b369171e24eb06d2dbdff0b3a7441b091e2a15c210174b336715b30166169",
+            "lamports": 1061720
+          },
+          {
+            "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            "data": "9c06e4d573ddb0dc7831a3f9712fd6a971e4cb1720b07b1775fcfe5de956d9b8",
+            "lamports": 1488440
+          },
+          {
+            "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            "data": "82bac797feb9e870c72814dbe3353312375b8fa0d9919aecbfbd1e40777787a4",
+            "lamports": 1488440
+          },
+          {
+            "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+            "data": "520bd264a5f83e6f70a418d88e2d94f971353138cbad95199a0ad67f939d3505",
+            "lamports": 8493760
+          },
+          {
+            "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            "data": "369dbe650831265cfb5a324150b585e9d8d1f77d26baa0a407d2a813f96a1455",
+            "lamports": 1488440
+          },
+          {
+            "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            "data": "152b5587d7eb6bb7e98a5a956844d9dd07547f33cb38e81db70b20483a6882da",
+            "lamports": 1488440
+          },
+          {
+            "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+            "data": "f6deed475705d0e353945443c1dd841590c9175cd38ee53c0a82a54d03553730",
+            "lamports": 23423880
+          },
+          {
+            "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+            "data": "fd4f393a65dd69a49c4f80361f35e88f580599c5159c85e8769814b86c100867",
+            "lamports": 52669440
+          },
+          {
+            "owner": "DRayAUgENGQBKVaX8owNhgzkEDyoHTGVEGHVJT1E9pfH",
+            "data": "2703f58e0da3507c34a68cfcae71dbcb9d451c9a74b0a742ac427f729783c398",
+            "lamports": 52669440
+          }
+        ]
+      }
+    }
+  ],
+  "forwardResult": {
+    "assets": "99000000",
+    "quote": "997453",
+    "supply": "100000000",
+    "shareAuthority": "3w3pR8guWs2SStpwf2bvkwoFyrNJjdiUSujsC5Jmp8TF",
+    "sqrtPriceX64": "18445881788394768666",
+    "price": "0.99990651302389681141",
+    "tick": -1
+  },
+  "reverseQuote": {
+    "input": "997453",
+    "expected": "995005",
+    "minimum": "985054",
+    "before": {
+      "assets": "99000000",
+      "quote": "997453",
+      "supply": "100000000",
+      "shareAuthority": "3w3pR8guWs2SStpwf2bvkwoFyrNJjdiUSujsC5Jmp8TF",
+      "sqrtPriceX64": "18445881788394768666",
+      "price": "0.99990651302389681141",
+      "tick": -1
+    }
+  },
+  "reverseResult": {
+    "assets": "99995005",
+    "quote": "0",
+    "supply": "100000000",
+    "shareAuthority": "3w3pR8guWs2SStpwf2bvkwoFyrNJjdiUSujsC5Jmp8TF",
+    "sqrtPriceX64": "18446741917357538409",
+    "price": "0.99999976620785992843",
+    "tick": -1
+  },
+  "tests": {
+    "positive": 8,
+    "negative": 17
+  },
+  "verification": {
+    "status": "PASS",
+    "verifiedAt": "2026-10-24T19:28:29.732Z",
+    "positiveChecks": 8,
+    "negativeChecks": 17,
+    "oldVaultAccountsUnchanged": 136,
+    "forward": {
+      "assets": "99000000",
+      "quote": "997453",
+      "supply": "100000000",
+      "shareAuthority": "3w3pR8guWs2SStpwf2bvkwoFyrNJjdiUSujsC5Jmp8TF",
+      "sqrtPriceX64": "18445881788394768666",
+      "price": "0.99990651302389681141",
+      "tick": -1
+    },
+    "reverse": {
+      "assets": "99995005",
+      "quote": "0",
+      "supply": "100000000",
+      "shareAuthority": "3w3pR8guWs2SStpwf2bvkwoFyrNJjdiUSujsC5Jmp8TF",
+      "sqrtPriceX64": "18446741917357538409",
+      "price": "0.99999976620785992843",
+      "tick": -1
+    },
+    "current": {
+      "assets": "0",
+      "quote": "0",
+      "supply": "0",
+      "shareAuthority": "8AeUZyL1kxZn3QLcqzL88Ay1i2wjDdui2VyTZHp9Y6fy",
+      "sqrtPriceX64": "18446741917357538409",
+      "price": "0.99999976620785992843",
+      "tick": -1
+    },
+    "finalBalanceLamports": 4779218480,
+    "totalSpentLamports": 756299840,
+    "innerRaydiumCpi": true,
+    "failedSwapPublished": false
+  },
+  "finalAudit": {
+    "checkedAt": "2026-10-24T19:33:44.192Z",
+    "allWeek12AndDeploySignaturesFinalized": true,
+    "bufferClosed": true,
+    "regressionWeek8To10": {
+      "passing": 10,
+      "failing": 0,
+      "scenarios": [
+        "✔ initializes a vault and opens an empty user position (3990ms)",
+        "✔ mints 1:1, prices later deposits from live assets, rounds down and isolates users (35822ms)",
+        "✔ rejects zero amount, insufficient funds, zero shares and slippage without changing state (14744ms)",
+        "✔ rejects substituted PDAs, mints, token accounts, owners and token program (23755ms)",
+        "✔ rejects a pre-funded vault with zero share supply (8253ms)",
+        "✔ withdraws partially and fully after donation, preserves history and allows a new deposit (26310ms)",
+        "✔ lets a recipient withdraw transferred shares with zero deposit history (30155ms)",
+        "✔ rejects zero, empty vault, excess shares and slippage without changing state (17395ms)",
+        "✔ rejects substituted accounts and a missing user signature (27483ms)",
+        "✔ does not lose shares when asset transfer fails after burn during preflight (21287ms)"
+      ]
+    },
+    "walletStartLamports": 5535518320,
+    "walletFinalLamports": 4626456160,
+    "totalSpentLamports": 909062160,
+    "week12IncludingDeployLamports": 756299840,
+    "regressionLamports": 152762320
+  }
+}

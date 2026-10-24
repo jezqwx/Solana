@@ -1,14 +1,33 @@
 use anchor_lang::prelude::*;
+pub mod strategy;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{self, Burn, Mint, MintTo, Token, TokenAccount, TransferChecked},
 };
+pub use strategy::*;
 
 declare_id!("DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9");
 
 #[program]
 pub mod liquidity_vault {
     use super::*;
+
+    pub fn initialize_strategy(ctx: Context<InitializeStrategy>) -> Result<()> {
+        strategy::initialize(ctx)
+    }
+
+    pub fn swap<'info>(
+        ctx: Context<'_, '_, '_, 'info, Swap<'info>>,
+        amount: u64,
+        min_amount_out: u64,
+        a_to_b: bool,
+    ) -> Result<()> {
+        strategy::execute_swap(ctx, amount, min_amount_out, a_to_b)
+    }
+
+    pub fn end_strategy(ctx: Context<EndStrategy>) -> Result<()> {
+        strategy::end(ctx)
+    }
 
     pub fn initialize_vault(ctx: Context<InitializeVault>) -> Result<()> {
         require!(
@@ -288,7 +307,7 @@ pub struct Deposit<'info> {
         mut,
         seeds = [b"share-mint", vault.key().as_ref()],
         bump,
-        mint::authority = vault,
+        constraint = share_mint.mint_authority == Some(vault.key()).into() @ VaultError::StrategyActive,
         mint::decimals = asset_mint.decimals,
         mint::token_program = token_program,
         constraint = share_mint.freeze_authority.is_none() @ VaultError::ShareMintFreezeAuthoritySet
@@ -341,7 +360,7 @@ pub struct Withdraw<'info> {
         mut,
         seeds = [b"share-mint", vault.key().as_ref()],
         bump,
-        mint::authority = vault,
+        constraint = share_mint.mint_authority == Some(vault.key()).into() @ VaultError::StrategyActive,
         mint::decimals = asset_mint.decimals,
         mint::token_program = token_program,
         constraint = share_mint.freeze_authority.is_none() @ VaultError::ShareMintFreezeAuthoritySet
@@ -427,6 +446,22 @@ pub enum VaultError {
     ZeroAssetsOut,
     #[msg("Calculated assets are below min_assets_out.")]
     WithdrawalSlippageExceeded,
+    #[msg("Deposits and withdrawals are locked while strategy controls share mint authority.")]
+    StrategyActive,
+    #[msg("Only the vault administrator may manage the strategy.")]
+    UnauthorizedAdmin,
+    #[msg("Invalid strategy, mint, pool or associated account binding.")]
+    InvalidStrategyAccount,
+    #[msg("Swap amount and minimum output must both be positive.")]
+    InvalidSwapAmount,
+    #[msg("Invalid Raydium tick array, bitmap or observation account.")]
+    InvalidRaydiumAccount,
+    #[msg("Strategy flag and share mint authority disagree.")]
+    InvalidStrategyLock,
+    #[msg("Second token vault must be empty before restoring ordinary mode.")]
+    StrategyNotSettled,
+    #[msg("Swap must spend the requested input and receive at least minimum output.")]
+    InvalidSwapResult,
 }
 
 #[cfg(test)]

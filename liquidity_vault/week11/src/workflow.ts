@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { laterWalletDeltas } from "./later-operations";
 import fs from "node:fs";
 import {
   Keypair,
@@ -245,6 +246,7 @@ export async function faucet() {
 }
 export async function verifyTokens(m: RecordData) {
   assert(m.tokens?.length === 2);
+  const laterDeltas = await laterWalletDeltas(m.tokens);
   for (const t of m.tokens) {
     await owned(pk(t.mint), TOKEN_PROGRAM_ID, MINT_SIZE);
     const mint = await getMint(
@@ -268,9 +270,9 @@ export async function verifyTokens(m: RecordData) {
     assert(!account.isFrozen && account.amount > BigInt(0));
     const expense = BigInt(m.position?.spent?.[t.mint] ?? "0");
     assert.equal(
-      account.amount + expense,
+      account.amount + expense - laterDeltas.get(t.mint)!,
       SUPPLY,
-      `${t.label}: wallet balance plus recorded liquidity contribution`
+      `${t.label}: wallet balance plus liquidity contribution minus confirmed later wallet movements`
     );
   }
   console.log(

@@ -1,10 +1,10 @@
-# Liquidity Vault — Weeks 8–11
+# Liquidity Vault — Weeks 8–12
 
 Существующий проект Anchor **0.31.1**. Program ID:
 `DVpRhnW4ZE76uRq2gQBJsEPiikmV4cTH5tqXNinJHQK9`.
 `anchor-lang` и `anchor-spl` закреплены на 0.31.1; SPL features:
-`token`, `associated_token`, `mint`. Используется классический SPL Token Program,
-без Token-2022. Week 9 добавляет deposit и выпуск shares; Week 10 — withdraw
+`token`, `associated_token`, `mint`. Активы Vault используют классический SPL Token
+Program; Token-2022 активы не поддерживаются. Week 9 добавляет deposit и выпуск shares; Week 10 — withdraw
 со сжиганием shares и возвратом asset-токенов через CPI.
 
 ## Архитектура аккаунтов
@@ -455,9 +455,165 @@ owner пула и personal position (`DRayAU…`), mint/owner/balance NFT ATA, �
 
 ### Следующие недели
 
-- **Week 12:** swap через CPI от имени Vault PDA — отдельное согласованное изменение.
+- **Week 12:** swap через CPI от имени Vault PDA — реализация описана ниже.
 - **Week 13:** CLMM-позиция от имени Vault PDA — отдельное изменение владения и учёта.
 
 Перед переводом реальных депозитов vault в CLMM необходимо решить учёт полной
 стоимости активов и вывод из стратегии: текущие deposit/withdraw учитывают только
 asset ATA. Week 11 эту модель не меняет и миграцию не добавляет.
+
+## Week 12 — Raydium CLMM swap CPI
+
+Добавлены `initialize_strategy`, `swap(amount, min_amount_out, a_to_b)` и
+`end_strategy`. Все три инструкции доступны только admin соответствующего Vault.
+Они работают с проверенным пулом Week 11 и классическими GUL-A/GUL-B SPL mint.
+Вызов официального `raydium-clmm-cpi::cpi::swap_v2` подписывается Vault PDA:
+`[b"vault", asset_mint.key().as_ref(), &[vault.bump]]`. Raydium выполняет вложенные
+SPL Token переводы, средства поступают только в канонические ATA Vault.
+
+Новый StrategyConfig PDA: `[b"strategy", vault.key().as_ref()]`, 138 байт.
+Второе хранилище — ATA GUL-B с token authority=Vault PDA. Существующие seeds,
+VaultConfig (145 байт), UserPosition (81 байт), Program ID и ключ программы сохранены.
+Зависимость Raydium закреплена на официальной revision
+`5aeec4b40b09c7f42e28a0f697132b76de872856`, совместимой с Anchor 0.31.1.
+
+При первом swap share mint authority атомарно передаётся Strategy PDA: прежние
+deposit/withdraw отклоняются с `StrategyActive`, сохраняя свои списки аккаунтов.
+Повторный initialize_strategy не сбрасывает блокировку. После обратного обмена
+`end_strategy` требует **нулевой реальный баланс GUL-B** и согласованные основные
+активы/supply, после чего возвращает mint authority Vault PDA. Исторические
+счётчики депозитов не меняются при обменах и выводе.
+
+Это учебная блокировка, **не полноценный NAV**: вывод зависит от завершения
+стратегии администратором. Donations/dust в GUL-B могут задержать разблокировку;
+внешнее сжигание всех shares также может оставить неразрешимое состояние A>0/S=0.
+При неактивной стратегии незапрошенные donations второго токена не оцениваются
+в shares. Week 13 — позиция от имени Vault, управление ликвидностью и комиссии —
+в эту реализацию не входит.
+
+Клиент использует живые pool/tick accounts через Raydium SDK, целые BN и
+`min_out = floor(expected_out * 9900 / 10000)` для slippage 1%. Нулевые amount/minimum,
+чужие admin, pool, mint, ATA, CPI target, observation и tick arrays отклоняются.
+Подтверждение использует сохранённую signature; при неопределённом результате
+операция останавливается без повторной подписи и повторного финансового исполнения.
+
+Архитектура, ограничения ABI Raydium, транспорт и команды:
+[week12/README.md](week12/README.md). Публичные адреса, signatures, котировки и
+логи проверок: [week12/manifest.devnet.json](week12/manifest.devnet.json).
+
+### Реальный swap Devnet
+
+| Ресурс | Адрес / ссылка |
+| --- | --- |
+| Pool GUL-A/GUL-B | [gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf](https://explorer.solana.com/address/gftP6PpRANU2cNY1aRXCGXv2gYjGgLYQLWuw41rbDrf?cluster=devnet) |
+| GUL-A mint | `6USW7mimGN27RwZjLBoywVH9TJAVukg1jvscso5kAnvy` |
+| GUL-B mint | `GtQoCfFeNdcvcoDCusK3s8od9JRP27Sw4g2LcJqb5Ka1` |
+| Тестовый Vault | `8AeUZyL1kxZn3QLcqzL88Ay1i2wjDdui2VyTZHp9Y6fy` |
+| Основное ATA GUL-A | `Gi9DMbq37o7bU8ecvh3uHSwy1D8pxBcb9hLgYsg6hrdf` |
+| Второе ATA GUL-B | `GabSU6QBJoTFzEqNPBpQFkgvqRCfkLsyAKonNSnouUbm` |
+| Strategy PDA | `3w3pR8guWs2SStpwf2bvkwoFyrNJjdiUSujsC5Jmp8TF` |
+| Upgrade прежнего Program ID | [jxBVzwBnyuywqY791Nnbne2zswjmcNJ5RyPwLWqybG6miuGc2Yxzf927Nhy6TZKkrVJwawd4iopEs5wZdmrJpmw](https://explorer.solana.com/tx/jxBVzwBnyuywqY791Nnbne2zswjmcNJ5RyPwLWqybG6miuGc2Yxzf927Nhy6TZKkrVJwawd4iopEs5wZdmrJpmw?cluster=devnet) |
+| Swap GUL-A → GUL-B | [5d1KC2VjD9t6287WCDCrkbDAD75djLn5sfSpVSKBiDGP5xzqWCUnmM2zhU54tkR1gM4TDBNzW7KBh9tEqwft571W](https://explorer.solana.com/tx/5d1KC2VjD9t6287WCDCrkbDAD75djLn5sfSpVSKBiDGP5xzqWCUnmM2zhU54tkR1gM4TDBNzW7KBh9tEqwft571W?cluster=devnet) |
+
+Внесено 100 тестовых GUL-A; обменена только 1 GUL-A. SDK предсказал **0.997453 GUL-B**,
+minimum при slippage 1% — **0.987478 GUL-B**; фактически получено **0.997453 GUL-B**.
+
+| Показатель | До прямого swap | После прямого swap |
+| --- | ---: | ---: |
+| GUL-A в Vault | 100 | 99 |
+| GUL-B в Vault | 0 | 0.997453 |
+| Supply shares, raw | 100000000 | 100000000 |
+| Цена, GUL-B за GUL-A | 1 | 0.99990651302389681141 |
+| sqrtPriceX64 | 18446744073709551616 | 18445881788394768666 |
+| Tick | 0 | -1 |
+
+Цена сдвинулась вниз: продажа GUL-A в пул увеличивает его количество относительно
+GUL-B. Разница между 1 и полученным количеством обусловлена комиссией пула 0.25%
+и влиянием сделки на цену; slippage tolerance 1% не является дополнительной комиссией.
+
+Обратный swap: [3jHW6Z6JQ4d3QfBZoqRSJFZoU6WnUdynjZDS5bVaZU4so58LuKT4nZub41oRGFG1EFDTJxgZfQLRjE5VApJmpDFr](https://explorer.solana.com/tx/3jHW6Z6JQ4d3QfBZoqRSJFZoU6WnUdynjZDS5bVaZU4so58LuKT4nZub41oRGFG1EFDTJxgZfQLRjE5VApJmpDFr?cluster=devnet).
+Получено 0.995005 GUL-A; Vault после двух обменов содержит **99.995005 GUL-A / 0 GUL-B**.
+Совокупная разница — **0.004995 тестового GUL-A**. Цена после reverse:
+**0.99999976620785992843** GUL-B/GUL-A, sqrtPriceX64=18446741917357538409.
+Затем [end_strategy](https://explorer.solana.com/tx/35WsH47pFQx1uV5zxiYkVc8LfbUqkRZ5R4pUSJkyJUZQfLSjNSk4FMGcaazdi66ND3kT6JDH63K4c2uiZET8j5cB?cluster=devnet)
+подтвердил реальные остатки и восстановил mint authority Vault PDA.
+
+Отклонённый swap с завышенным minimum получил **Raydium TooLittleOutputReceived,
+custom 6018**. Его подписанная simulation signature:
+`3qaoZHxXp2vDxtMcxqeot6bewwwPejcY5589cLu3BKDUZY9pXppTSf5aT8Ms5PFH5fmiSTWP3SPzTNHYTyRp7Xc6`.
+Она **не опубликована on-chain**: подписанная RPC-симуляция отклоняет заведомо неверный
+minimum до отправки. Поэтому Explorer-ссылка на подтверждённую failed-транзакцию
+для неё отсутствует; это ограничение требования «две on-chain ссылки», а не
+неизвестный статус. Проверены ожидаемый CPI error и неизменность snapshots балансов,
+share mint, стратегии и аккаунтов пула. Логи сохранены в `negativeTests.slippage`.
+Preflight не отключался ради получения failed signature в Explorer.
+
+Для Explorer выбрать Devnet, открыть успешный swap, проверить `Success`, корневой
+Program ID Vault и вложенный вызов `DRayAU…` в Inner Instructions. Его SPL Token
+переводы должны совпадать с debit/credit двух ATA в таблице; Transaction Details
+покажет fee payer admin, а полномочия token transfer принадлежат Vault PDA.
+Снимки цены сравнивать по манифесту: Explorer показывает актуальное состояние пула,
+которое уже изменилось после обратного swap. Визуальный просмотр Explorer не
+подтверждён в этой среде; результаты проверяются напрямую через Devnet RPC.
+
+### Проверки Week 12 и регрессия
+
+- `cargo fmt --check`, `anchor build`, общий `yarn typecheck` — PASS.
+- Rust: **10 passed**; локальные TypeScript-тесты Week 11: **4 passed**,
+  Week 12: **2 passed**.
+- Week 12 Devnet: **8 положительных проверок**, **17 отрицательных симуляций**;
+  журнал содержит **10 подтверждённых транзакций** подготовки, swap и завершения.
+- Существующие Week 8–10: **10 passing, 0 failing**, без изменения файла тестов.
+- 136 прежних аккаунтов VaultConfig/UserPosition/share mint/asset ATA совпадают
+  с исходным baseline Week 11.
+- После unlock внесена ещё 1 GUL-A и выведены все shares: оба ATA Vault и supply=0,
+  strategy.active=false, mint authority=Vault PDA. Оба исторических счётчика —
+  **101000000 raw = 101 GUL-A**, без уменьшения при выводе.
+- Развёрнутый бинарник совпадает с локальным SHA-256
+  `1ea9a16fb4bfbc3407c857cb136fab44a2d4ef903dbd043b92b7090ee62b0ec2`.
+
+Во время первоначальной отправки forward swap был HTTP 429. Клиент остановился;
+перед новой попыткой отдельно доказаны finalized expiry исходного blockhash,
+отсутствие signature/transaction в истории и неизменность финализированных
+аккаунтов. Эта попытка сохранена в `expiredAttempts`, а не выдана за swap.
+После ограничения частоты HTTP-запросов сценарий завершился. В старой регрессии
+также были 429, но все десять сценариев завершились успешно; проверки не ослаблялись.
+
+Локальные проверки и read-only верификация:
+
+```bash
+cargo fmt --check
+anchor build
+cargo test -p liquidity_vault --lib
+yarn typecheck
+yarn --cwd week11 test
+yarn --cwd week12 test
+yarn --cwd week11 verify
+yarn --cwd week12 verify
+```
+
+Интеграционные команды **отправляют Devnet-транзакции**; не запускаются при build/typecheck:
+
+```bash
+ANCHOR_PROVIDER_URL=https://api.devnet.solana.com \
+ANCHOR_WALLET="$HOME/.config/solana/jezqwx/id.json" RUN_DEVNET_INTEGRATION=1 \
+yarn ts-mocha -p ./tsconfig.json -t 1000000 tests/liquidity_vault.ts
+yarn --cwd week12 run run
+```
+
+Повторный Week 12 `run` сверяет сохранённые подписи; не удаляйте манифест для
+повторения финансовых операций. При неизвестной signature выполнение останавливается.
+
+Финальная read-only проверка Week 11/12 прошла; deploy и все десять успешных
+Week 12 signatures имеют статус **finalized**, deploy buffer закрыт и его rent
+возвращён. Баланс кошелька до Week 12: **5.535518320 Devnet SOL**, после всех
+проверок: **4.626456160 Devnet SOL**. Разница **0.909062160 SOL**:
+
+- **0.756299840 SOL** — обновление программы и полный цикл Week 12;
+- **0.152762320 SOL** — регрессия Week 8–10 с отдельными тестовыми mint/аккаунтами.
+
+Это изменение баланса, включающее transaction fees и rent, а не только комиссии.
+Из него **0.744402880 SOL** приходится на увеличение rent ProgramData при росте
+бинарника с 332880 до 479416 байт; размеры VaultConfig/UserPosition не менялись.
+Реальные активы, mainnet и платные RPC не использовались. Приватные ключи не входят
+в изменения Git; commit/push/merge не выполнялись.
